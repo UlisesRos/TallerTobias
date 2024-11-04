@@ -84,11 +84,11 @@ function MotoForm() {
     return (
         <Box
             display='flex'
-            justifyContent='center'
+            flexDir='column'
             alignItems='center'
             h='100vh'
             >
-             <Flex
+            <Flex
                 flexDir={['column', 'row', 'row']}
                 rowGap='20px'
                 justifyContent='space-between'

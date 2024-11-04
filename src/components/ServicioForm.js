@@ -74,7 +74,7 @@ function ServicioForm() {
     return (
         <Box
             display='flex'
-            justifyContent='center'
+            flexDir='column'
             alignItems='center'
             h='100vh'
             >

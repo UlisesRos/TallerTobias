@@ -113,7 +113,7 @@ const RegistroCompleto = () => {
                 justifyContent='space-between'
                 alignItems='center'
                 >
-                <Image bgColor='black' borderRadius='100px' src={logo} alt='logo del taller' w='90px' h='90px' />
+                <Image bgColor='black' borderRadius='100px' src={logo} alt='logo del taller' w='90px' h='90px' padding='4px'/>
                 <Flex
                     flexDir={['column', 'row', 'row']}
                     rowGap='20px'
