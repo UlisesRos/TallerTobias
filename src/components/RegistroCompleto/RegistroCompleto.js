@@ -234,7 +234,17 @@ const RegistroCompleto = () => {
                                 </Td>
                                 <Td textTransform='capitalize'>{`${registro.Motos[0].marca} ${registro.Motos[0].modelo}`}</Td>
                                 <Td textAlign='center' textTransform='uppercase'>{registro.Motos[0].patente}</Td>
-                                <Td>{registro.Servicios[0].descripcion}</Td>
+                                <Td
+                                    w='300px'
+                                    maxW='300px'
+                                    overflowY='auto'
+                                    whiteSpace='normal'
+                                    textOverflow='ellipsis'
+                                    css={{
+                                        maxHeight: '200px',
+                                        overflowY: 'auto'
+                                    }}
+                                    >{registro.Servicios[0].descripcion}</Td>
                                 <Td>$ {registro.Servicios[0].monto}</Td>
                                 <Td textAlign='center'>
                                     {
