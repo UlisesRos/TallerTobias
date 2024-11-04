@@ -1,7 +1,11 @@
-import { Flex, Box, FormControl, FormLabel, Input, Stack, Button, useToast } from '@chakra-ui/react'
+import { Flex, Box, FormControl, FormLabel, Input, Stack, Button, useToast, Image } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
+import logo from '../img/motor.png'
+
+const apiRender = 'https://tallertobiasback.onrender.com' || 'http://localhost:5000'
 
 function MotoForm() {
 
@@ -50,7 +54,7 @@ function MotoForm() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/postmoto', formData);
+            const response = await axios.post(`${apiRender}/api/postmoto`, formData);
 
             toast({
                 title: 'Exito',
@@ -84,6 +88,60 @@ function MotoForm() {
             alignItems='center'
             h='100vh'
             >
+             <Flex
+                flexDir={['column', 'row', 'row']}
+                rowGap='20px'
+                justifyContent='space-between'
+                alignItems='center'
+                mt='20px'
+                mb={['50px','30px','30px']}
+                w='90%'
+                >
+                <Image bgColor='black' borderRadius='100px' src={logo} alt='logo del taller' w='90px' h='90px' padding='4px'/>
+                <Flex
+                    flexDir={['column', 'row', 'row']}
+                    rowGap='20px'
+                    justifyContent='space-between'
+                    alignItems='center'
+                    w='300px'
+                    wrap='wrap'
+                    >
+                    <Link
+                        to='/'
+                        >
+                        <Button
+                            bg='primario.1'
+                            color='secundario.2'
+                            boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                            transition="box-shadow 0.3s ease"
+                            _hover={{
+                                color: 'white',
+                                border: 'solid 1px black',
+                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                            }}
+                            >
+                            Home
+                        </Button>
+                    </Link>
+                    <Link
+                        to='/registrocompleto'
+                        >
+                        <Button
+                            bg='primario.1'
+                            color='secundario.2'
+                            boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                            transition="box-shadow 0.3s ease"
+                            _hover={{
+                                color: 'white',
+                                border: 'solid 1px black',
+                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                            }}
+                            >
+                            Registro Completo
+                        </Button>
+                    </Link>
+                </Flex>
+            </Flex>
             <Flex
                 padding={['30px','50px','50px']}
                 justifyContent='center'

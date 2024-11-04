@@ -5,6 +5,8 @@ import { useState } from 'react'
 import logo from '../img/motor.png'
 import axios from 'axios'
 
+const apiRender = 'https://tallertobiasback.onrender.com' || 'http://localhost:5000'
+
 function ClientForm() {
 
     console.log(new Date())
@@ -47,7 +49,7 @@ function ClientForm() {
 
         try {
             //Peticion POST con Axios
-            const response = await axios.post('http://localhost:5000/api/postcliente', formData);
+            const response = await axios.post(`${apiRender}/api/postcliente`, formData);
             const clienteId = response.data.id
 
             console.log(clienteId)
@@ -101,7 +103,7 @@ function ClientForm() {
                 mb={['50px','30px','30px']}
                 w='90%'
                 >
-                <Image bgColor='black' borderRadius='100px' src={logo} alt='logo del taller' w='90px' h='90px' />
+                <Image bgColor='black' borderRadius='100px' src={logo} alt='logo del taller' w='90px' h='90px' padding='4px'/>
                 <Flex
                     flexDir={['column', 'row', 'row']}
                     rowGap='20px'

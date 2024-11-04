@@ -23,6 +23,8 @@ import ClienteModal from './ClienteModal';
 import MontoModal from './MontoModal';
 import { Link } from 'react-router-dom';
 
+const apiRender = 'https://tallertobiasback.onrender.com' || 'http://localhost:5000'
+
 const RegistroCompleto = () => {
     const [registros, setRegistros] = useState([]);
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
@@ -38,7 +40,7 @@ const RegistroCompleto = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/registrocompleto');
+                const response = await axios.get(`${apiRender}/registrocompleto`);
                 setRegistros(response.data);
                 setFiltrados(response.data); // Inicialmente mostrar todos los registros
             } catch (error) {
@@ -54,14 +56,11 @@ const RegistroCompleto = () => {
         onOpen();
     };
 
-    // Total de ganancias acumuladas
-    const montoNumerico = filtrados.map(registro => parseInt(registro.Servicios[0].monto));
-    const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
-
+    
     // Funcion para eliminar un cliente
     const handleEliminarCliente = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/registrocompleto/${id}`);
+            await axios.delete(`${apiRender}/registrocompleto/${id}`);
             setRegistros(registros.filter(registro => registro.id !== id));
             setTimeout(() => {
                 window.location.reload()
@@ -84,7 +83,7 @@ const RegistroCompleto = () => {
             console.error('Error al eliminar el cliente', error)
         }
     };
-
+    
     //Funcion para buscar por nombre
     const registrosFiltrados = registros
     .filter((registro) => registro.nombre.toLowerCase().includes(busqueda.toLowerCase()))
@@ -96,13 +95,16 @@ const RegistroCompleto = () => {
         const diferenciaDias = (hoy - fechaRecepcion) / (1000 * 60 * 60 * 24);
         return diferenciaDias <= 30;
     })
-      // Ordenar por próximo servicio si está activado
+    // Ordenar por próximo servicio si está activado
     .sort((a, b) => {
         if (!ordenProximoServicio) return 0;
         return a.Servicios[0].proximoServicio - b.Servicios[0].proximoServicio;
     });
-
-
+    
+    // Total de ganancias acumuladas
+    const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
+    const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
+    
     return (
         <Box maxW="90%" mx="auto" mt="2" p="4">
             <Flex
@@ -165,7 +167,7 @@ const RegistroCompleto = () => {
                     border='solid 1px black'
                     textAlign='center'
                     mb='15px'
-                    w='40%'
+                    w={['80%','60%','40%']}
                     placeholder='Buscar cliente por Nombre'
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
