@@ -16,7 +16,8 @@ import {
     Flex,
     Image,
     useToast,
-    Input
+    Input,
+    Select
 } from '@chakra-ui/react';
 import logo from '../../img/motor.png'
 import ClienteModal from './ClienteModal';
@@ -32,6 +33,7 @@ const RegistroCompleto = () => {
     const [verUltimos30Dias, setVerUltimos30Dias] = useState(false);
     const [ordenProximoServicio, setOrdenProximoServicio] = useState(false);
     const [busqueda, setBusqueda] = useState('')
+    const [mesSeleccionado, setMesSeleccionado] = useState('')
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     //Notificaciones
@@ -56,7 +58,8 @@ const RegistroCompleto = () => {
         onOpen();
     };
 
-    
+
+
     // Funcion para eliminar un cliente
     const handleEliminarCliente = async (id) => {
         try {
@@ -83,6 +86,11 @@ const RegistroCompleto = () => {
             console.error('Error al eliminar el cliente', error)
         }
     };
+
+    //Funcion para seleccionar el mes
+    const handleMesChange = (e) => {
+        setMesSeleccionado(e.target.value)
+    }
     
     //Funcion para buscar por nombre
     const registrosFiltrados = registros
@@ -99,7 +107,13 @@ const RegistroCompleto = () => {
     .sort((a, b) => {
         if (!ordenProximoServicio) return 0;
         return a.Servicios[0].proximoServicio - b.Servicios[0].proximoServicio;
-    });
+    })
+    .filter((registro) => {
+        const fechaRecepcion = new Date(registro.Servicios[0].fechaRecepcion);
+        return mesSeleccionado 
+        ? fechaRecepcion.getMonth() + 1 === parseInt(mesSeleccionado, 10)
+        : true
+    })
     
     // Total de ganancias acumuladas
     const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
@@ -175,10 +189,32 @@ const RegistroCompleto = () => {
             </Flex>
             <Box
                 display='flex'
-                justifyContent='start'
+                justifyContent='center'
                 columnGap='15px'
                 flexWrap='wrap'
                 >
+                <Select
+                    placeholder="Seleccionar mes"
+                    onChange={handleMesChange}
+                    value={mesSeleccionado}
+                    w='200px'
+                    textAlign='center'
+                    mb={4}
+                    border='solid black 1px'
+                >
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </Select>
                 <Button onClick={() => setVerUltimos30Dias(!verUltimos30Dias)} colorScheme="blue" mb="4">
                     {verUltimos30Dias ? 'Mostrar Todos' : 'Filtrar ultimos 30 dias'}
                 </Button>
