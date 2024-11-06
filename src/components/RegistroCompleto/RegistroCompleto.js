@@ -58,8 +58,6 @@ const RegistroCompleto = () => {
         onOpen();
     };
 
-
-
     // Funcion para eliminar un cliente
     const handleEliminarCliente = async (id) => {
         try {
@@ -98,9 +96,9 @@ const RegistroCompleto = () => {
     .filter(registro => {
         if (!verUltimos30Dias) return true;
         // Aquí calcula la diferencia de días y filtra
-        const fechaRecepcion = new Date(registro.Servicios[0].fechaRecepcion);
+        const fechaEntrega = new Date(registro.Servicios[0].fechaEntrega);
         const hoy = new Date();
-        const diferenciaDias = (hoy - fechaRecepcion) / (1000 * 60 * 60 * 24);
+        const diferenciaDias = (hoy - fechaEntrega) / (1000 * 60 * 60 * 24);
         return diferenciaDias <= 30;
     })
     // Ordenar por próximo servicio si está activado
@@ -109,9 +107,9 @@ const RegistroCompleto = () => {
         return a.Servicios[0].proximoServicio - b.Servicios[0].proximoServicio;
     })
     .filter((registro) => {
-        const fechaRecepcion = new Date(registro.Servicios[0].fechaRecepcion);
+        const fechaEntrega = new Date(registro.Servicios[0].fechaEntrega);
         return mesSeleccionado 
-        ? fechaRecepcion.getMonth() + 1 === parseInt(mesSeleccionado, 10)
+        ? fechaEntrega.getMonth() + 1 === parseInt(mesSeleccionado, 10)
         : true
     })
     
@@ -231,10 +229,11 @@ const RegistroCompleto = () => {
                             <Th>Cliente</Th>
                             <Th>Moto</Th>
                             <Th>Patente</Th>
+                            <Th>KM</Th>
                             <Th>Servicio</Th>
                             <Th>Monto</Th>
                             <Th>Proximo Servicio</Th>
-                            <Th>Fecha de Recepcion</Th>
+                            <Th>Desc. Prox. Servicio</Th>
                             <Th>Fecha de Entrega</Th>
                         </Tr>
                     </Thead>
@@ -270,6 +269,9 @@ const RegistroCompleto = () => {
                                 </Td>
                                 <Td textTransform='capitalize'>{`${registro.Motos[0].marca} ${registro.Motos[0].modelo}`}</Td>
                                 <Td textAlign='center' textTransform='uppercase'>{registro.Motos[0].patente}</Td>
+                                <Td textAlign='center'>
+                                    {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}
+                                </Td>
                                 <Td
                                     w='300px'
                                     maxW='300px'
@@ -289,7 +291,11 @@ const RegistroCompleto = () => {
                                         '-'
                                     }
                                 </Td>
-                                <Td textAlign='center'>{(registro.Servicios[0].fechaRecepcion).slice(0, 10)}</Td>
+                                <Td>
+                                    {
+                                        registro.Servicios[0].descripcionProximoServicio ? registro.Servicios[0].descripcionProximoServicio : '-'
+                                    }
+                                </Td>
                                 <Td textAlign='center'>{(registro.Servicios[0].fechaEntrega).slice(0, 10)}</Td>
                             </Tr>
                         ))}

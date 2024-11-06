@@ -9,8 +9,6 @@ const apiRender = 'https://tallertobiasback.onrender.com' || 'http://localhost:5
 
 function ClientForm() {
 
-    console.log(new Date())
-
     // Manejo del formulario
     const [ formData, setFormData ] = useState({
         nombre: '',

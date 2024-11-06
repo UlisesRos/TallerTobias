@@ -13,10 +13,10 @@ function ServicioForm() {
     
     const [ formData, setFormData ] = useState({
         descripcion: '',
-        fechaRecepcion: new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }),
-        fechaEntrega: '',
+        fechaEntrega: new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }),
         monto: '',
         proximoServicio: '',
+        descripcionProximoServicio: '',
         clienteId
     });
 
@@ -171,41 +171,21 @@ function ServicioForm() {
                         </FormControl>
 
                         <FormControl 
-                            id='fechaRecepcion' 
+                            id='fechaEntrega' 
                             isRequired
                             >
                             <FormLabel textAlign='center'>
-                                Fecha de Recepcion
+                                Fecha de Entrega
                             </FormLabel>
                             <Input 
-                                value={formData.fechaRecepcion}
+                                value={formData.fechaEntrega}
                                 onChange={handleChange}
                                 fontWeight='medium'
                                 textAlign='center'
                                 w='280px'
                                 type='date'
-                                name='fechaRecepcion'
-                                isReadOnly
-                                />
-                        </FormControl>
-
-                        <FormControl 
-                            id='fechaEntrega'
-                            >
-                            <FormLabel
-                                textAlign='center'
-                                >
-                                Fecha de Entrega
-                            </FormLabel>
-                            <Input
-                                value={formData.fechaEntrega}
-                                onChange={handleChange}
-                                fontWeight='medium'
-                                textAlign='center'
-                                w='280px' 
-                                type='date'
                                 name='fechaEntrega'
-                                placeholder='Selecciona la fecha de entrega'
+                                isReadOnly
                                 />
                         </FormControl>
 
@@ -247,6 +227,26 @@ function ServicioForm() {
                                 type='number'
                                 name='proximoServicio'
                                 placeholder='Ingresa los dias para el proximo servicio'
+                                />
+                        </FormControl>
+
+                        <FormControl 
+                            id='descripcionProximoServicio'
+                            >
+                            <FormLabel
+                                textAlign='center'
+                                >
+                                Descripcion del Prox Servicio
+                            </FormLabel>
+                            <Textarea
+                                value={formData.descripcionProximoServicio}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px' 
+                                type='text'
+                                name='descripcionProximoServicio'
+                                placeholder='Ingresa la descripcion del prox servicio'
                                 />
                         </FormControl>
 

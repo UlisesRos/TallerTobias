@@ -14,6 +14,7 @@ function MotoForm() {
         marca:'',
         modelo:'',
         patente:'',
+        km:'',
         clienteId
     });
 
@@ -217,6 +218,26 @@ function MotoForm() {
                                 type='text'
                                 name='patente'
                                 placeholder='Ingresa la patente de la moto'
+                                />
+                        </FormControl>
+
+                        <FormControl 
+                            id='km' 
+                            >
+                            <FormLabel
+                                textAlign='center'
+                                >
+                                KM
+                            </FormLabel>
+                            <Input
+                                value={formData.km}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px' 
+                                type='number'
+                                name='km'
+                                placeholder='Ingresa el kilometraje de la moto'
                                 />
                         </FormControl>
 
