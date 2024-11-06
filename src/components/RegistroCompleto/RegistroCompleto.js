@@ -116,6 +116,12 @@ const RegistroCompleto = () => {
     // Total de ganancias acumuladas
     const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
     const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
+
+    // Formato de fecha DD-MM-YYYY
+    const formatDate = (dateString) => {
+        const [year, month, day] = dateString.split("-");
+        return `${day}-${month}-${year}`;
+    };
     
     return (
         <Box maxW="90%" mx="auto" mt="2" p="4">
@@ -273,6 +279,7 @@ const RegistroCompleto = () => {
                                     {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}
                                 </Td>
                                 <Td
+                                    textAlign='center'
                                     w='300px'
                                     maxW='300px'
                                     overflowY='auto'
@@ -291,12 +298,23 @@ const RegistroCompleto = () => {
                                         '-'
                                     }
                                 </Td>
-                                <Td>
+                                <Td
+                                    textAlign='center'
+                                    w='300px'
+                                    maxW='300px'
+                                    overflowY='auto'
+                                    whiteSpace='normal'
+                                    textOverflow='ellipsis'
+                                    css={{
+                                        maxHeight: '200px',
+                                        overflowY: 'auto'
+                                    }}
+                                    >
                                     {
                                         registro.Servicios[0].descripcionProximoServicio ? registro.Servicios[0].descripcionProximoServicio : '-'
                                     }
                                 </Td>
-                                <Td textAlign='center'>{(registro.Servicios[0].fechaEntrega).slice(0, 10)}</Td>
+                                <Td textAlign='center'>{formatDate((registro.Servicios[0].fechaEntrega).slice(0, 10))}</Td>
                             </Tr>
                         ))}
                     </Tbody>
