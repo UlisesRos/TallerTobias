@@ -232,15 +232,15 @@ const RegistroCompleto = () => {
                     <Thead>
                         <Tr>
                             <Th></Th>
-                            <Th>Cliente</Th>
-                            <Th>Moto</Th>
-                            <Th>Patente</Th>
-                            <Th>KM</Th>
-                            <Th>Servicio</Th>
-                            <Th>Monto</Th>
-                            <Th>Proximo Servicio</Th>
-                            <Th>Desc. Prox. Servicio</Th>
-                            <Th>Fecha de Entrega</Th>
+                            <Th textAlign='center'>Cliente</Th>
+                            <Th textAlign='center'>Moto</Th>
+                            <Th textAlign='center'>Patente</Th>
+                            <Th textAlign='center'>KM</Th>
+                            <Th textAlign='center'>Servicio</Th>
+                            <Th textAlign='center'>Monto</Th>
+                            <Th textAlign='center'>Proximo Servicio</Th>
+                            <Th textAlign='center'>Desc. Prox. Servicio</Th>
+                            <Th textAlign='center'>Fecha de Entrega</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -261,7 +261,7 @@ const RegistroCompleto = () => {
                                     Eliminar
                                     </Button>
                                 </Td>
-                                <Td>
+                                <Td textAlign='center'>
                                     <Text
                                         as='button'
                                         _hover={{
@@ -273,7 +273,7 @@ const RegistroCompleto = () => {
                                         {registro.nombre}
                                     </Text>
                                 </Td>
-                                <Td textTransform='capitalize'>{`${registro.Motos[0].marca} ${registro.Motos[0].modelo}`}</Td>
+                                <Td textAlign='center' textTransform='capitalize'>{`${registro.Motos[0].marca} ${registro.Motos[0].modelo}`}</Td>
                                 <Td textAlign='center' textTransform='uppercase'>{registro.Motos[0].patente}</Td>
                                 <Td textAlign='center'>
                                     {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}
@@ -290,7 +290,7 @@ const RegistroCompleto = () => {
                                         overflowY: 'auto'
                                     }}
                                     >{registro.Servicios[0].descripcion}</Td>
-                                <Td>$ {registro.Servicios[0].monto}</Td>
+                                <Td textAlign='center'>$ {registro.Servicios[0].monto}</Td>
                                 <Td textAlign='center'>
                                     {
                                         (registro.Servicios[0].proximoServicio).length > 0 ? 
