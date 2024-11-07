@@ -294,8 +294,7 @@ const RegistroCompleto = () => {
                                 <Td textAlign='center'>
                                     {
                                         (registro.Servicios[0].proximoServicio).length > 0 ? 
-                                        `${registro.Servicios[0].proximoServicio} Días` :
-                                        '-'
+                                        registro.Servicios[0].proximoServicio === 'Realizar Proximo Servicio' ? 'Realizar Proximo Servicio' : `${registro.Servicios[0].proximoServicio} Días` : '-'
                                     }
                                 </Td>
                                 <Td
