@@ -24,7 +24,7 @@ import ClienteModal from './ClienteModal';
 import MontoModal from './MontoModal';
 import { Link } from 'react-router-dom';
 
-const apiRender = 'https://tallertobiasback.onrender.com' || 'http://localhost:5000'
+const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
 const RegistroCompleto = () => {
     const [registros, setRegistros] = useState([]);
