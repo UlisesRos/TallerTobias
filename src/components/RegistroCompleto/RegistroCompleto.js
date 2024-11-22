@@ -231,7 +231,6 @@ const RegistroCompleto = () => {
                 <Table variant="striped" colorScheme="teal">
                     <Thead>
                         <Tr>
-                            <Th></Th>
                             <Th textAlign='center'>Cliente</Th>
                             <Th textAlign='center'>Moto</Th>
                             <Th textAlign='center'>Patente</Th>
@@ -241,26 +240,12 @@ const RegistroCompleto = () => {
                             <Th textAlign='center'>Proximo Servicio</Th>
                             <Th textAlign='center'>Desc. Prox. Servicio</Th>
                             <Th textAlign='center'>Fecha de Entrega</Th>
+                            <Th></Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {registrosFiltrados.map((registro) => (
                             <Tr key={registro.id}>
-                                <Td>
-                                    <Button
-                                        fontSize='sm'
-                                        colorScheme='red'
-                                        ml='3px'
-                                        boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
-                                        transition="box-shadow 0.3s ease"
-                                        _hover={{
-                                            boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
-                                        }}
-                                        onClick={() => handleEliminarCliente(registro.id)}
-                                        >
-                                    Eliminar
-                                    </Button>
-                                </Td>
                                 <Td textAlign='center'>
                                     <Text
                                         as='button'
@@ -314,6 +299,21 @@ const RegistroCompleto = () => {
                                     }
                                 </Td>
                                 <Td textAlign='center'>{formatDate((registro.Servicios[0].fechaEntrega).slice(0, 10))}</Td>
+                                <Td>
+                                    <Button
+                                        fontSize='sm'
+                                        colorScheme='red'
+                                        ml='3px'
+                                        boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                                        transition="box-shadow 0.3s ease"
+                                        _hover={{
+                                            boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                                        }}
+                                        onClick={() => handleEliminarCliente(registro.id)}
+                                        >
+                                    Eliminar
+                                    </Button>
+                                </Td>
                             </Tr>
                         ))}
                     </Tbody>
