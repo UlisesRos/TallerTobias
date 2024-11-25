@@ -32,6 +32,17 @@ function Home() {
                 mt='20px'
                 >
                 <Link
+                    to={'/calendario'}
+                    >
+                    <Button
+                        _hover={{
+                            transform: 'scale(1.1)'
+                        }}
+                        >
+                        Calendario
+                    </Button>
+                </Link>
+                <Link
                     to={'/registrocompleto'}
                     >
                     <Button 

@@ -50,8 +50,6 @@ function ClientForm() {
             const response = await axios.post(`${apiRender}/api/postcliente`, formData);
             const clienteId = response.data.id
 
-            console.log(clienteId)
-
             toast({
                 title: 'Exito',
                 description: 'Cliente registrado con exito.',
