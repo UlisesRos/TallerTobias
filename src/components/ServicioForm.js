@@ -18,7 +18,6 @@ function ServicioForm() {
         monto: '',
         proximoServicio: '',
         descripcionProximoServicio: '',
-        pago: '',
         clienteId
     });
 
@@ -215,27 +214,6 @@ function ServicioForm() {
                                 type='number'
                                 name='monto'
                                 placeholder='Ingresa el monto a cobrar'
-                                />
-                        </FormControl>
-
-                        <FormControl 
-                            id='pago'
-                            isRequired
-                            >
-                            <FormLabel
-                                textAlign='center'
-                                >
-                                $ Pago
-                            </FormLabel>
-                            <Input
-                                value={formData.pago}
-                                onChange={handleChange}
-                                fontWeight='medium'
-                                textAlign='center'
-                                w='280px' 
-                                type='number'
-                                name='pago'
-                                placeholder='Ingresa lo que el cliente te pagó'
                                 />
                         </FormControl>
 
