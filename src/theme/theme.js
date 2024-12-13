@@ -3,12 +3,12 @@ import { extendTheme } from "@chakra-ui/react";
 // Colores
 const colors = {
     primario: {
-        1: "#0C0C0C",
+        1: "#FDA633",
         2: "#9B3922"
     },
     secundario: {
         1: '#481E14',
-        2: '#F2613F'
+        2: 'black'
     }
 }
 

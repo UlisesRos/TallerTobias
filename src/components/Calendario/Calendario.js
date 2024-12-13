@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text, VStack, Image, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, VStack, Image, useToast, Spinner } from '@chakra-ui/react';
 import logo from '../../img/motor.png'
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
@@ -6,12 +6,14 @@ import { format, startOfWeek, addDays, subDays, isSameDay } from "date-fns";
 import { es } from 'date-fns/locale'
 import axios from 'axios';
 import ModalTurno from './ModalTurno';
+import fondo from '../../img/fondo.jpg'
 
 const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
 function Calendario() {
     const [ currentDate, setCurrentDate ] = useState(new Date());
     const [ turnos, setTurnos ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
 
     const toast = useToast()
 
@@ -38,8 +40,10 @@ function Calendario() {
             try {
                 const response = await axios.get(`${apiRender}/getturnos`)
                 setTurnos(response.data)
+                setIsLoading(false)
             } catch (error) {
                 console.error('Error al obtener los turnos', error)
+                setIsLoading(false)
             }
         };
 
@@ -72,6 +76,9 @@ function Calendario() {
     return (
         <Box
             p={4}
+            backgroundImage={fondo} 
+            backgroundColor='rgba(0, 0, 0, 0.7)' 
+            backgroundBlendMode='overlay'
             >
             <Flex
                 justifyContent='space-between'
@@ -91,9 +98,8 @@ function Calendario() {
                         boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                         transition="box-shadow 0.3s ease"
                         _hover={{
-                            color: 'white',
-                            border: 'solid 1px black',
-                            boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                            color: 'secundario.2',
+                            transform: 'scale(1.1)',
                         }}
                         >
                         Home
@@ -112,9 +118,8 @@ function Calendario() {
                     boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                     transition="box-shadow 0.3s ease"
                     _hover={{
-                        color: 'white',
-                        border: 'solid 1px black',
-                        boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                        color: 'secundario.2',
+                        transform: 'scale(1.1)',
                     }}
                     onClick={handlePreviousWeek}
                     >
@@ -128,15 +133,15 @@ function Calendario() {
                     boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                     transition="box-shadow 0.3s ease"
                     _hover={{
-                        color: 'white',
-                        border: 'solid 1px black',
-                        boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                        color: 'secundario.2',
+                        transform: 'scale(1.1)',
                     }}
-                    onClick={handleNextWeek}
+                    onClick={handlePreviousWeek}
                     >
                     Semana Anterior
                 </Button>
                 <Text
+                    color='white'
                     w='auto'
                     textAlign='center'
                     fontWeight='bold'
@@ -152,9 +157,8 @@ function Calendario() {
                     boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                     transition="box-shadow 0.3s ease"
                     _hover={{
-                        color: 'white',
-                        border: 'solid 1px black',
-                        boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                        color: 'secundario.2',
+                        transform: 'scale(1.1)',
                     }}
                     onClick={handleNextWeek}
                     >
@@ -168,9 +172,8 @@ function Calendario() {
                     boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                     transition="box-shadow 0.3s ease"
                     _hover={{
-                        color: 'white',
-                        border: 'solid 1px black',
-                        boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                        color: 'secundario.2',
+                        transform: 'scale(1.1)',
                     }}
                     onClick={handleNextWeek}
                     >
@@ -216,50 +219,65 @@ function Calendario() {
                                 >
                                 {format(day, "dd/MM")}
                             </Text>
-                            {turnosDelDia.map((turno) => (
-                                <Flex
-                                    flexDir='column'
-                                    align='center'
-                                    boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
-                                    transition="box-shadow 0.3s ease"
-                                    _hover={{
-                                        boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
-                                    }}  
-                                    key={turno.id}
-                                    mt='10px'
-                                    padding='10px 10px 10px 15px' 
-                                    bg="#A5D6A7"
-                                    borderRadius='md'
-                                    w={['95%','70%',"50%"]}
-                                    textAlign='center'
-                                    >
-                                    <Text fontWeight="bold">{turno.nombre}</Text>
-                                    <Text><Text as='span' textDecor='underline'>Moto</Text>: {turno.moto}</Text>
-                                    <Text><Text as='span' textDecor='underline'>Servicio</Text>: {turno.descripcion}</Text>
+                            {isLoading ? (
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                mt='20px'
+                                >
+                                <Spinner size="xl" color="blue.500" />
+                                <Text color='black'>Cargando datos...</Text>
+                                </Box>
+                            ) : ( 
+                            <>
+                                {turnosDelDia.map((turno) => (
                                     <Flex
-                                        alignItems='center'
-                                        justifyContent='center'
-                                        w='100%'
+                                        flexDir='column'
+                                        align='center'
+                                        boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                                        transition="box-shadow 0.3s ease"
+                                        _hover={{
+                                            boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                                        }}  
+                                        key={turno.id}
+                                        mt='10px'
+                                        padding='10px 10px 10px 15px' 
+                                        bg="secundario.2"
+                                        color='white'
+                                        borderRadius='md'
+                                        w={['95%','70%',"50%"]}
+                                        textAlign='center'
                                         >
-                                        <Button
-                                            mt='10px'
-                                            size='sm'
-                                            bg='primario.1'
-                                            color='secundario.2'
-                                            boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
-                                            transition="box-shadow 0.3s ease"
-                                            _hover={{
-                                                color: 'white',
-                                                border: 'solid 1px black',
-                                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
-                                            }}
-                                            onClick={() => handleDeleteTurno(turno.id)}
+                                        <Text fontWeight="bold">{turno.nombre}</Text>
+                                        <Text><Text as='span' textDecor='underline'>Moto</Text>: {turno.moto}</Text>
+                                        <Text><Text as='span' textDecor='underline'>Servicio</Text>: {turno.descripcion}</Text>
+                                        <Flex
+                                            alignItems='center'
+                                            justifyContent='center'
+                                            w='100%'
                                             >
-                                            Eliminar
-                                        </Button>
+                                            <Button
+                                                mt='10px'
+                                                size='sm'
+                                                bg='primario.1'
+                                                color='secundario.2'
+                                                boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                                                transition="box-shadow 0.3s ease"
+                                                _hover={{
+                                                    color: 'secundario.2',
+                                                    transform: 'scale(1.1)',
+                                                }}
+                                                onClick={() => handleDeleteTurno(turno.id)}
+                                                >
+                                                Eliminar
+                                            </Button>
+                                        </Flex>
                                     </Flex>
-                                </Flex>
-                            ))}
+                                ))}
+                            </>
+                            )}
 
                             <ModalTurno selectedDate={day}/>
                         </VStack>

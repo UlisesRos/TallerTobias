@@ -7,15 +7,13 @@ const MontoModal = ({sumaMonto}) => {
     return (
         <>
             <Button
-                alignSelf='center'
-                marginTop='20px'
-                bg='primario.1'
-                color='secundario.2'
+                bg='#FDA633 '
+                color='black'
                 boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                 transition="box-shadow 0.3s ease"
                 _hover={{
-                    color: 'white',
-                    border: 'solid 1px black',
+                    color: 'black',
+                    transform: 'scale(1.1)',
                     boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
                 }}
                 onClick={onOpen}

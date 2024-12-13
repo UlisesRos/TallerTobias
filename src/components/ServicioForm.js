@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../img/motor.png'
+import fondo from '../img/fondo.jpg'
 
 const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
@@ -17,6 +18,7 @@ function ServicioForm() {
         monto: '',
         proximoServicio: '',
         descripcionProximoServicio: '',
+        pago: '',
         clienteId
     });
 
@@ -76,7 +78,10 @@ function ServicioForm() {
             display='flex'
             flexDir='column'
             alignItems='center'
-            h='100vh'
+            h='auto'
+            backgroundImage={fondo} 
+            backgroundColor='rgba(0, 0, 0, 0.7)' 
+            backgroundBlendMode='overlay'
             >
             <Flex
                 flexDir={['column', 'row', 'row']}
@@ -105,9 +110,8 @@ function ServicioForm() {
                             boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                             transition="box-shadow 0.3s ease"
                             _hover={{
-                                color: 'white',
-                                border: 'solid 1px black',
-                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                                color: 'secundario.2',
+                                transform: 'scale(1.1)',
                             }}
                             >
                             Home
@@ -122,9 +126,8 @@ function ServicioForm() {
                             boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                             transition="box-shadow 0.3s ease"
                             _hover={{
-                                color: 'white',
-                                border: 'solid 1px black',
-                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                                color: 'secundario.2',
+                                transform: 'scale(1.1)',
                             }}
                             >
                             Registro Completo
@@ -133,17 +136,22 @@ function ServicioForm() {
                 </Flex>
             </Flex>
             <Flex
-                padding='20px 40px 20px 40px'
+                mt='20px'
+                bg='white'
+                padding={['30px','50px','50px']}
                 justifyContent='center'
                 alignItems='center'
                 h='auto'
                 w='auto'
                 borderRadius='10px'
-                boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
+                boxShadow="0px 15px 25px rgba(0, 0, 0, 0.3)"
+                transform="translateY(-20px)" 
                 _hover={{
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                    boxShadow: "0px 20px 30px rgba(0, 0, 0, 0.5)", 
+                    transform: "translateY(-30px) scale(1.02)", 
+                    transition: "all 0.3s ease-in-out", 
                 }}
-                transition="box-shadow 0.3s ease"
+                transition="all 0.3s ease-in-out"
                 >
                 <form
                     onSubmit={ handleSubmit }
@@ -211,6 +219,27 @@ function ServicioForm() {
                         </FormControl>
 
                         <FormControl 
+                            id='pago'
+                            isRequired
+                            >
+                            <FormLabel
+                                textAlign='center'
+                                >
+                                $ Pago
+                            </FormLabel>
+                            <Input
+                                value={formData.pago}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px' 
+                                type='number'
+                                name='pago'
+                                placeholder='Ingresa lo que el cliente te pagó'
+                                />
+                        </FormControl>
+
+                        <FormControl 
                             id='proximoServicio'
                             >
                             <FormLabel
@@ -257,9 +286,8 @@ function ServicioForm() {
                             boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                             transition="box-shadow 0.3s ease"
                             _hover={{
-                                color: 'white',
-                                border: 'solid 1px black',
-                                boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                                color: 'secundario.2',
+                                transform: 'scale(1.1)',
                             }}
                             >
                             Registrar Moto

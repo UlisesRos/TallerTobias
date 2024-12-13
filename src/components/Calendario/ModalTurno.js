@@ -78,9 +78,8 @@ const ModalTurno = ({ selectedDate }) => {
                 boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                 transition="box-shadow 0.3s ease"
                 _hover={{
-                    color: 'white',
-                    border: 'solid 1px black',
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                    color: 'secundario.2',
+                    transform: 'scale(1.1)',
                 }}
                 onClick={onOpen}
                 size='sm'

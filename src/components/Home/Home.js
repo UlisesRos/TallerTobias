@@ -8,7 +8,7 @@ function Home() {
     const texto = '¡Bienvenido al Sistema de Gestión de Tobias!'
     return (
         <Flex
-            bg='primario.1'
+            bg='secundario.2'
             h='100vh'
             color='white'
             justifyContent='center'
