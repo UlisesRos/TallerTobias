@@ -18,7 +18,7 @@ import {
     Spinner
 } from '@chakra-ui/react';
 import logo from '../../img/motor.png'
-import ClienteModal from './ClienteModal';  
+import ClienteModal from './ClienteModal';
 import MontoModal from './MontoModal';
 import { Link } from 'react-router-dom';
 import casco from '../../img/casco.png'
@@ -38,8 +38,6 @@ const RegistroCompleto = () => {
     const [mesSeleccionado, setMesSeleccionado] = useState('')
     const [añoSeleccionado, setAñoSeleccionado] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-    const [pago, setPago] = useState(0)
-    const [isEditing, setIsEditing] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     //Notificaciones
@@ -60,6 +58,7 @@ const RegistroCompleto = () => {
         fetchData();
     }, []);
 
+    console.log(registros)
 
     // Ver Modal con los datos del cliente
     const handleClienteClick = (cliente) => {
@@ -96,46 +95,17 @@ const RegistroCompleto = () => {
         }
     };
 
-    const handleChangePago = (e) => {
-        setPago(e.target.value); // Actualiza el estado con el valor del input
-    };
-
-    const handleSavePago = async (id) => {
-        try {
-            // Enviar la actualización al backend
-            const response = await axios.put(`/api/putservicios/${id}`, { pago });
-            
-            // Si la solicitud fue exitosa
-            toast({
-                title: 'Exito',
-                description: 'Pago actualizado correctamente',
-                status: 'success',
-                duration: '3000',
-                isClosable: true
-            });
-            setIsEditing(false); // Deja de editar después de guardar
-        } catch (error) {
-            // Manejo de errores
-            console.error('Error al actualizar el pago', error);
-            toast({
-                title: 'Error',
-                description: 'Hubo un problema al actualizar el pago',
-                status: 'error',
-                duration: '3000',
-                isClosable: true
-            });
-        }
-    };
-
     //Funcion para seleccionar el mes
     const handleMesChange = (e) => {
         setMesSeleccionado(e.target.value)
     }
 
-    //Funcion para seleccionar el mes
+     //Funcion para seleccionar el año
     const handleAñoChange = (e) => {
         setAñoSeleccionado(e.target.value)
     }
+
+
 
     //Funcion para buscar por nombre
     const registrosFiltrados = registros
@@ -155,13 +125,15 @@ const RegistroCompleto = () => {
     })
     .filter((registro) => {
         const fechaEntrega = new Date(registro.Servicios[0].fechaEntrega);
-        const mes = fechaEntrega.getMonth() +1;
+        const mes = fechaEntrega.getMonth() + 1;
         const año = fechaEntrega.getFullYear();
         return (
             (!mesSeleccionado || mes === parseInt(mesSeleccionado, 10)) &&
             (!añoSeleccionado || año === parseInt(añoSeleccionado, 10))
         );
-    });
+    })
+    
+    console.log(registrosFiltrados)
 
     // Total de ganancias acumuladas
     const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
@@ -276,7 +248,7 @@ const RegistroCompleto = () => {
                     mb={4}
                     bg="white"
                 >
-                    {Array.from({ length: 1 }, (_, i) => {
+                    {Array.from({ length: 10 }, (_, i) => {
                         const year = new Date().getFullYear() - i;
                         return (
                             <option key={year} value={year}>
@@ -392,39 +364,7 @@ const RegistroCompleto = () => {
                                         <Text><strong>Patente:</strong> {registro.Motos[0].patente}</Text>
                                         <Text mt='8px'><strong>KM:</strong> {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}</Text>
                                         <Text mt='8px'><strong>Servicio:</strong> {registro.Servicios[0].descripcion}</Text>
-                                        <Text mt='8px'><strong>Monto:</strong> $ {registro.Servicios[0].monto}</Text>
-                                        <Box mt='5px' display='flex' >
-                                            <Text fontSize="md" fontWeight="bold">Pago Realizado:</Text>
-                                            {isEditing ? (
-                                                <Box display='flex' columnGap='5px'>
-                                                    <Input 
-                                                        type="number" 
-                                                        value={pago} 
-                                                        onChange={handleChangePago} 
-                                                        placeholder="Introduce el monto"
-                                                        w='30%'
-                                                        ml='10px'
-                                                    />
-                                                    <Flex
-                                                        flexDir='column'
-                                                        >
-                                                        <Text as='button' onClick={() => handleSavePago(registro.id)} color="blue" size="sm">
-                                                            Guardar
-                                                        </Text>
-                                                        <Text as='button' onClick={() => setIsEditing(false)} color="red" size="sm">
-                                                            Cancelar
-                                                        </Text>
-                                                    </Flex>
-                                                </Box>
-                                            ) : (
-                                                <Box display='flex' columnGap='10px'>
-                                                    <Text ml='8px' fontSize="md">${pago}</Text>
-                                                    <Text as='button' onClick={() => setIsEditing(true)} color='red' _hover={{transform: 'scale(1.1)'}}>
-                                                        Editar
-                                                    </Text>
-                                                </Box>
-                                            )}
-                                        </Box>
+                                        <Text mt='8px'><strong>Monto:</strong> {registro.Servicios[0].monto}</Text>
                                         <Text mt='8px'><strong>Proximo Servicio:</strong>
                                             {
                                                 (registro.Servicios[0].proximoServicio).length > 0 ? 
