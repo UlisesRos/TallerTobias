@@ -248,7 +248,7 @@ const RegistroCompleto = () => {
                     mb={4}
                     bg="white"
                 >
-                    {Array.from({ length: 10 }, (_, i) => {
+                    {Array.from({ length: 3 }, (_, i) => {
                         const year = new Date().getFullYear() - i;
                         return (
                             <option key={year} value={year}>
