@@ -25,6 +25,8 @@ import casco from '../../img/casco.png'
 import moto from '../../img/moto.png'
 import mecanico from '../../img/mecanico.png'
 import fondo from '../../img/fondo.jpg'
+import pagado from '../../img/pagado.png'
+import deuda from '../../img/nopago.png'
 
 const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
@@ -35,8 +37,11 @@ const RegistroCompleto = () => {
     const [verUltimos30Dias, setVerUltimos30Dias] = useState(false);
     const [ordenProximoServicio, setOrdenProximoServicio] = useState(false);
     const [busqueda, setBusqueda] = useState('')
+    const [filtrarPorDeuda, setFiltrarPorDeuda] = useState(false);
     const [mesSeleccionado, setMesSeleccionado] = useState('')
     const [añoSeleccionado, setAñoSeleccionado] = useState('')
+    const [pago, setPago] = useState(0); 
+    const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -74,7 +79,7 @@ const RegistroCompleto = () => {
                 setRegistros(registros.filter(registro => registro.id !== id));
                 setTimeout(() => {
                     window.location.reload()
-                }, );
+                }, 1000);
                 toast({
                     title: 'Exito!',
                     description: 'El cliente fue eliminado con exito',
@@ -105,8 +110,6 @@ const RegistroCompleto = () => {
         setAñoSeleccionado(e.target.value)
     }
 
-
-
     //Funcion para buscar por nombre
     const registrosFiltrados = registros
     .filter((registro) => registro.nombre.toLowerCase().includes(busqueda.toLowerCase()))
@@ -132,8 +135,16 @@ const RegistroCompleto = () => {
             (!añoSeleccionado || año === parseInt(añoSeleccionado, 10))
         );
     })
-    
-    console.log(registrosFiltrados)
+    .filter((registro) => {
+        if (!filtrarPorDeuda) return true; // Si no está activado, no filtra por deuda
+        return registro.Servicios.some((servicio) => servicio.deuda > 0);
+    })
+    .sort((a, b) => {
+        if (!filtrarPorDeuda) return 0; // No ordena si el filtro no está activo
+        const deudaA = Math.max(...a.Servicios.map((servicio) => servicio.deuda));
+        const deudaB = Math.max(...b.Servicios.map((servicio) => servicio.deuda));
+        return deudaB - deudaA;
+    });
 
     // Total de ganancias acumuladas
     const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
@@ -143,6 +154,39 @@ const RegistroCompleto = () => {
     const formatDate = (dateString) => {
         const [year, month, day] = dateString.split("-");
         return `${day}-${month}-${year}`;
+    };
+
+    const handleChangePago = (e) => {
+        setPago(e.target.value); 
+    };
+
+    const handleSavePago = async (id) => {
+        try {
+            // Enviar la actualización al backend
+            await axios.put(`${apiRender}/api/updateservicio/${id}`, { pago });
+            
+            toast({
+                title: 'Exito',
+                description: 'Pago actualizado con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000);
+            setIsEditing(false);
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al actualizar el pago', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar el pago',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
     };
 
     return (
@@ -271,6 +315,14 @@ const RegistroCompleto = () => {
                 }}>
                     {ordenProximoServicio ? 'Ordenar por Fecha de Creacion' : 'Ordenar por Próximo Servicio'}
                 </Button>
+                <Button
+                    colorScheme={filtrarPorDeuda ? "red" : "teal"}
+                    color='black'
+                    onClick={() => setFiltrarPorDeuda((prev) => !prev)}
+                    mb={4}
+                >
+                    {filtrarPorDeuda ? "Mostrar Todos" : "Filtrar por Deuda"}
+                </Button>
                 <Flex>
                     <MontoModal sumaMonto={sumaMonto} />
                 </Flex>
@@ -304,7 +356,7 @@ const RegistroCompleto = () => {
                         {registrosFiltrados.map((registro, index) => (
                             <AccordionItem 
                                 border='none'
-                                mb='20px'
+                                mt='40px'
                                 key={registro.id}
                                 >
                                 {({ isExpanded }) => (
@@ -336,27 +388,34 @@ const RegistroCompleto = () => {
                                             justifyContent='center'
                                             >
                                             <Image src={casco} alt='cliente' w='20px'/>
-                                            <Text fontWeight="bold" textAlign='center' fontSize='lg'>{registro.nombre}</Text>
+                                            <Text fontWeight="bold" textAlign='start' fontSize='lg'>{registro.nombre}</Text>
                                         </Flex>
 
                                         <Flex
                                             columnGap='10px'
                                             >
                                             <Image src={moto} alt='moto' w='25px' h='25px'/>
-                                            <Text fontWeight="bold" textAlign='center'>{registro.Motos[0].marca} {registro.Motos[0].modelo}</Text>
+                                            <Text fontWeight="bold" textAlign='start'>{registro.Motos[0].marca} {registro.Motos[0].modelo}</Text>
                                         </Flex>
 
                                         <Flex
                                             columnGap='10px'
                                             >
                                             <Image src={mecanico} alt='proximoservicio' w='25px' h='25px'/>
-                                            <Text><strong>Proximo Servicio:</strong>
+                                            <Text textAlign='start'><strong>Proximo Servicio:</strong>
                                                 {
                                                     (registro.Servicios[0].proximoServicio).length > 0 ? 
-                                                    parseInt(registro.Servicios[0].proximoServicio, 10) === 0 ? ' Realizar Proximo Servicio' : ` ${registro.Servicios[0].proximoServicio} Días` 
-                                                    : ' -'
+                                                    parseInt(registro.Servicios[0].proximoServicio, 10) === -1 ? ' Realizar Proximo Servicio' : ` ${registro.Servicios[0].proximoServicio} Días` 
+                                                    : ' No hay proximo servicio'
                                                 }
                                             </Text>                                        
+                                        </Flex>
+
+                                        <Flex
+                                            columnGap='10px'
+                                            >
+                                            <Image src={registro.Servicios[0].deuda === 0 ? pagado : deuda} alt='moto' w='25px' h='25px'/>
+                                            <Text fontWeight="bold" textAlign='center'>{registro.Servicios[0].deuda === 0 ? 'Cliente al Dia' : 'Deuda: $' + registro.Servicios[0].deuda}</Text>
                                         </Flex>
                                     </Box>
                                     </AccordionButton>
@@ -364,11 +423,84 @@ const RegistroCompleto = () => {
                                         <Text><strong>Patente:</strong> {registro.Motos[0].patente}</Text>
                                         <Text mt='8px'><strong>KM:</strong> {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}</Text>
                                         <Text mt='8px'><strong>Servicio:</strong> {registro.Servicios[0].descripcion}</Text>
-                                        <Text mt='8px'><strong>Monto:</strong> {registro.Servicios[0].monto}</Text>
+                                        <Text mt='8px'><strong>Monto:</strong> ${registro.Servicios[0].monto}</Text>
+                                        <Box
+                                            display='flex'
+                                            mt='6px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'>Pago Realizado:</Text>
+                                            {isEditing ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    >
+                                                    <Input
+                                                        alignSelf='center'
+                                                        type="number" 
+                                                        value={pago} 
+                                                        onChange={handleChangePago} 
+                                                        placeholder="Introduce el monto"
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSavePago(registro.id)} 
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text 
+                                                            onClick={() => setIsEditing(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].pago}</Text>
+                                                    <Text   
+                                                        as='button' 
+                                                        onClick={() => setIsEditing(true)} 
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
                                         <Text mt='8px'><strong>Proximo Servicio:</strong>
                                             {
                                                 (registro.Servicios[0].proximoServicio).length > 0 ? 
-                                                parseInt(registro.Servicios[0].proximoServicio, 10) === 0 ? ' Realizar Proximo Servicio' : ` ${registro.Servicios[0].proximoServicio} Días` 
+                                                parseInt(registro.Servicios[0].proximoServicio, 10) === -1 ? ' Realizar Proximo Servicio' : ` ${registro.Servicios[0].proximoServicio} Días` 
                                                 : ' -'
                                             }
                                         </Text>
