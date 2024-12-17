@@ -27,10 +27,10 @@ import mecanico from '../../img/mecanico.png'
 import fondo from '../../img/fondo.jpg'
 import pagado from '../../img/pagado.png'
 import deuda from '../../img/nopago.png'
+import RepuestosModal from './RepuestosModal';
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
-const RegistroCompleto = () => {
+const RegistroCompleto = ({apiRender}) => {
     const [registros, setRegistros] = useState([]);
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
     const [filtrados, setFiltrados] = useState([]);
@@ -63,7 +63,6 @@ const RegistroCompleto = () => {
         fetchData();
     }, []);
 
-    console.log(registros)
 
     // Ver Modal con los datos del cliente
     const handleClienteClick = (cliente) => {
@@ -137,7 +136,7 @@ const RegistroCompleto = () => {
     })
     .filter((registro) => {
         if (!filtrarPorDeuda) return true; // Si no está activado, no filtra por deuda
-        return registro.Servicios.some((servicio) => servicio.deuda > 0);
+        return registro.Servicios.some((servicio) => servicio.deuda > 1);
     })
     .sort((a, b) => {
         if (!filtrarPorDeuda) return 0; // No ordena si el filtro no está activo
@@ -146,9 +145,6 @@ const RegistroCompleto = () => {
         return deudaB - deudaA;
     });
 
-    // Total de ganancias acumuladas
-    const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
-    const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
 
     // Formato de fecha DD-MM-YYYY
     const formatDate = (dateString) => {
@@ -164,7 +160,6 @@ const RegistroCompleto = () => {
         try {
             // Enviar la actualización al backend
             await axios.put(`${apiRender}/api/updateservicio/${id}`, { pago });
-            
             toast({
                 title: 'Exito',
                 description: 'Pago actualizado con exito',
@@ -324,7 +319,7 @@ const RegistroCompleto = () => {
                     {filtrarPorDeuda ? "Mostrar Todos" : "Filtrar por Deuda"}
                 </Button>
                 <Flex>
-                    <MontoModal sumaMonto={sumaMonto} />
+                    <MontoModal registrosFiltrados={registrosFiltrados} />
                 </Flex>
 
             </Box>
@@ -452,7 +447,7 @@ const RegistroCompleto = () => {
                                                         >
                                                         <Text
                                                             as='button'
-                                                            onClick={() => handleSavePago(registro.id)} 
+                                                            onClick={() => handleSavePago(registro.Servicios[0].clienteId)} 
                                                             size="sm"
                                                             _hover={{
                                                                 transform: 'scale(1.1)'
@@ -513,6 +508,7 @@ const RegistroCompleto = () => {
                                             rowGap='20px'
                                             flexDir={['column', 'row', 'row']}
                                             >
+                                            <RepuestosModal registrosFiltrados={registrosFiltrados} registroId = {registro.Servicios[0].clienteId} apiRender={apiRender}/>
                                             <Text
                                                 fontWeight='bold'
                                                 as='button'
@@ -527,6 +523,7 @@ const RegistroCompleto = () => {
                                             <Button
                                                 fontSize='sm'
                                                 colorScheme='red'
+                                                color='black'
                                                 ml='3px'
                                                 boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                                                 transition="box-shadow 0.3s ease"

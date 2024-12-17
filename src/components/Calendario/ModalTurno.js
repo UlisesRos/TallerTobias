@@ -2,9 +2,7 @@ import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, Modal
 import { useState } from "react";
 import axios from 'axios'
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
-
-const ModalTurno = ({ selectedDate }) => {
+const ModalTurno = ({ selectedDate, apiRender }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ formData, setFormData ] = useState({

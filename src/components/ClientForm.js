@@ -6,9 +6,8 @@ import logo from '../img/motor.png'
 import axios from 'axios'
 import fondo from '../img/fondo.jpg'
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
-function ClientForm() {
+function ClientForm({apiRender}) {
 
     // Manejo del formulario
     const [ formData, setFormData ] = useState({

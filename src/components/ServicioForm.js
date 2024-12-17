@@ -6,9 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../img/motor.png'
 import fondo from '../img/fondo.jpg'
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
-
-function ServicioForm() {
+function ServicioForm({apiRender}) {
 
     const { clienteId } = useParams();
     

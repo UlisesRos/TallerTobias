@@ -6,9 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import logo from '../img/motor.png'
 import fondo from '../img/fondo.jpg'
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
-
-function MotoForm() {
+function MotoForm({apiRender}) {
 
     const { clienteId } = useParams();
     const [ formData, setFormData ] = useState({
@@ -88,7 +86,7 @@ function MotoForm() {
             display='flex'
             flexDir='column'
             alignItems='center'
-            h='auto'
+            h='100vh'
             backgroundImage={fondo} 
             backgroundColor='rgba(0, 0, 0, 0.7)' 
             backgroundBlendMode='overlay'

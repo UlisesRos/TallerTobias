@@ -8,9 +8,8 @@ import axios from 'axios';
 import ModalTurno from './ModalTurno';
 import fondo from '../../img/fondo.jpg'
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
-function Calendario() {
+function Calendario({apiRender}) {
     const [ currentDate, setCurrentDate ] = useState(new Date());
     const [ turnos, setTurnos ] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
@@ -279,7 +278,7 @@ function Calendario() {
                             </>
                             )}
 
-                            <ModalTurno selectedDate={day}/>
+                            <ModalTurno selectedDate={day} apiRender={apiRender}/>
                         </VStack>
                     )
                     })}

@@ -1,6 +1,14 @@
 import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Text, useDisclosure } from "@chakra-ui/react"
 
-const MontoModal = ({sumaMonto}) => {
+const MontoModal = ({registrosFiltrados}) => {
+
+    // Total de ganancias acumuladas
+        const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
+        const pagoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].pago));
+        const deudaNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].deuda));
+        const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
+        const sumaPago = pagoNumerico.reduce((ac, va) => ac + va, 0);
+        const sumaDeuda = deudaNumerico.reduce((ac, va) => ac + va, 0);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
         
@@ -25,21 +33,38 @@ const MontoModal = ({sumaMonto}) => {
                 <ModalContent w='80%'>
                         <ModalHeader
                             textAlign='center'
+                            fontWeight='bold'
                             >
-                                Ganancia Acumulada
+                                Ganancia/Deuda Acumulada
                         </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Text
                             textAlign='center'
                             fontSize='lg'
+                            mb='10px'
                             >
-                            Ganancia: ${sumaMonto}
+                            <strong>Ganancia Total:</strong> ${sumaMonto}
+                        </Text>
+
+                        <Text
+                            textAlign='center'
+                            fontSize='lg'
+                            mb='10px'
+                            >
+                            <strong>Ganancia Neta (sin deuda):</strong> ${sumaPago}
+                        </Text>
+
+                        <Text
+                            textAlign='center'
+                            fontSize='lg'
+                            >
+                            <strong>Total Deudas:</strong> ${sumaDeuda}
                         </Text>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
+                        <Button colorScheme='red' mr={3} onClick={onClose}>
                             Close
                         </Button>
                     </ModalFooter>
