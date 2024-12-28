@@ -2,7 +2,7 @@ import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, Modal
 import axios from "axios";
 import { useState } from "react";
 
-const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
+const RepuestosModal = ({ turnoId, apiRender, turnosDelDia }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ repuesto, setRepuesto ] = useState('')
@@ -36,7 +36,7 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
     // Función para eliminar un repuesto
     const handleDeleteRepuesto = async (repuesto) => {
         try {
-            await axios.delete(`${apiRender}/api/deleterepuesto/${registroId}/${repuesto}`);
+            await axios.delete(`${apiRender}/deleterepuesto/${turnoId}/${repuesto}`);
             // Filtrar el repuesto eliminado en el frontend
             setListaRepuestos(listaRepuestos.filter(item => item !== repuesto));
             toast({
@@ -65,7 +65,7 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
     const handleSaveRepuestos = async (id) => {
         try {
 
-            await axios.put(`${apiRender}/api/updaterepuestos/${id}`, { repuestos: listaRepuestos });
+            await axios.put(`${apiRender}/updaterepuestos/${id}`, { repuestos: listaRepuestos });
             toast({
                 title: 'Exito',
                 description: 'Repuestos agregados con exito',
@@ -91,14 +91,15 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
     return (
         <>
             <Button
-                size='md'
+                mt='10px'
+                size='sm'
                 bg='#FDA633 '
                 color='black'
                 boxShadow="0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.1)"
                 transition="box-shadow 0.3s ease"
                 _hover={{
-                    color: 'black',
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                    color: 'secundario.2',
+                    transform: 'scale(1.1)',
                 }}
                 onClick={onOpen}
                 >
@@ -116,15 +117,14 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         
-                        
                         <Text
                             mt={4}
                             fontWeight='bold'
                             >
                             {
-                                registrosFiltrados.map(reg => ( 
-                                    reg.Servicios[0].clienteId === registroId ?
-                                    reg.Servicios[0].listaRepuestos.length > 0 ? 'Repuestos actuales' : 'No hay repuestos aun' :
+                                turnosDelDia.map(turn => ( 
+                                    turn.id === turnoId ?
+                                    turn.listaRepuestos.length > 0 ? 'Repuestos actuales' : 'No hay repuestos aun' :
                                     ''
                                 ))
                             }
@@ -136,11 +136,11 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
                             textTransform='capitalize'
                             mb={2}
                             >
-                            {registrosFiltrados.map((registro) => (
-                                registro.Servicios[0].clienteId === registroId ?
-                                registro.Servicios[0].listaRepuestos.map((item, index) => (
+                            {turnosDelDia.map((turn) => (
+                                turn.id === turnoId ?
+                                turn.listaRepuestos.map((item, index) => (
                                 <ListItem key={index}>
-                                    {index +1}. {item}
+                                    {index + 1}. {item}
                                     <Text
                                         as='button'
                                         size='sm'
@@ -224,7 +224,7 @@ const RepuestosModal = ({ registroId, apiRender, registrosFiltrados }) => {
                             boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
                         }}
                         mr={3} 
-                        onClick={() => handleSaveRepuestos(registroId)} 
+                        onClick={() => handleSaveRepuestos(turnoId)} 
                         isDisabled={!listaRepuestos.length}>
                             Guardar
                         </Button>

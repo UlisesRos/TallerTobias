@@ -7,6 +7,7 @@ import { es } from 'date-fns/locale'
 import axios from 'axios';
 import ModalTurno from './ModalTurno';
 import fondo from '../../img/fondo.jpg'
+import RepuestosModal from './RepuestosModal';
 
 
 function Calendario({apiRender}) {
@@ -253,10 +254,13 @@ function Calendario({apiRender}) {
                                         <Text><Text as='span' textDecor='underline'>Moto</Text>: {turno.moto}</Text>
                                         <Text><Text as='span' textDecor='underline'>Servicio</Text>: {turno.descripcion}</Text>
                                         <Flex
+                                            flexDir={['column', 'row', 'row']}
                                             alignItems='center'
                                             justifyContent='center'
+                                            columnGap='20px'
                                             w='100%'
                                             >
+                                            <RepuestosModal turnosDelDia={turnosDelDia} turnoId={turno.id} apiRender={apiRender} />
                                             <Button
                                                 mt='10px'
                                                 size='sm'

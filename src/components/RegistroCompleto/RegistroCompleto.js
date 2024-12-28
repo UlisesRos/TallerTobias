@@ -27,7 +27,6 @@ import mecanico from '../../img/mecanico.png'
 import fondo from '../../img/fondo.jpg'
 import pagado from '../../img/pagado.png'
 import deuda from '../../img/nopago.png'
-import RepuestosModal from './RepuestosModal';
 
 
 const RegistroCompleto = ({apiRender}) => {
@@ -720,7 +719,6 @@ const RegistroCompleto = ({apiRender}) => {
                                             rowGap='20px'
                                             flexDir={['column', 'row', 'row']}
                                             >
-                                            <RepuestosModal registrosFiltrados={registrosFiltrados} registroId = {registro.Servicios[0].clienteId} apiRender={apiRender}/>
                                             <Text
                                                 fontWeight='bold'
                                                 as='button'
