@@ -40,9 +40,14 @@ const RegistroCompleto = ({apiRender}) => {
     const [filtrarPorDeuda, setFiltrarPorDeuda] = useState(false);
     const [mesSeleccionado, setMesSeleccionado] = useState('')
     const [añoSeleccionado, setAñoSeleccionado] = useState('')
-    const [pago, setPago] = useState(0); 
+    const [pago, setPago] = useState(0);
+    const [montoManoObra, setManoObra] = useState(0);
+    const [montoRepuesto, setRepuestoMonto] = useState(0); 
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingManoObra, setIsEditingManoObra] = useState(false);
+    const [isEditingRepuestos, setIsEditingRepuestos] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
+    const [userData, setUserData] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     //Notificaciones
@@ -63,6 +68,11 @@ const RegistroCompleto = ({apiRender}) => {
         fetchData();
     }, []);
 
+    // funcion para refrescar los usuarios
+    const fetchUsuarios = async () => {
+        const response = await axios.get(`${apiRender}/registrocompleto`);
+        setUserData(response.data);
+    };
 
     // Ver Modal con los datos del cliente
     const handleClienteClick = (cliente) => {
@@ -76,9 +86,7 @@ const RegistroCompleto = ({apiRender}) => {
             try {
                 await axios.delete(`${apiRender}/registrocompleto/${id}`);
                 setRegistros(registros.filter(registro => registro.id !== id));
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000);
+                fetchUsuarios()
                 toast({
                     title: 'Exito!',
                     description: 'El cliente fue eliminado con exito',
@@ -156,6 +164,14 @@ const RegistroCompleto = ({apiRender}) => {
         setPago(e.target.value); 
     };
 
+    const handleChangeManoObra = (e) => {
+        setManoObra(e.target.value); 
+    };
+
+    const handleChangeRepuestoMonto = (e) => {
+        setRepuestoMonto(e.target.value); 
+    };
+
     const handleSavePago = async (id) => {
         try {
             // Enviar la actualización al backend
@@ -167,9 +183,7 @@ const RegistroCompleto = ({apiRender}) => {
                 duration: 3000,
                 isClosable: true
             });
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000);
+            fetchUsuarios()
             setIsEditing(false);
         } catch (error) {
             // Manejo de errores
@@ -182,7 +196,59 @@ const RegistroCompleto = ({apiRender}) => {
                 isClosable: true
             });
         }
+    }; 
+    
+    const handleSaveManoObra = async (id) => {
+        try {
+            // Enviar la actualización al backend
+            await axios.put(`${apiRender}/api/updatemontomanoobra/${id}`, { montoManoObra });
+            toast({
+                title: 'Exito',
+                description: 'Pago actualizado con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingManoObra(false);
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al actualizar el pago', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar el pago',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
     };
+    
+    const handleSaveRepuestoMonto = async (id) => {
+        try {
+            // Enviar la actualización al backend
+            await axios.put(`${apiRender}/api/updatemontorepuesto/${id}`, { montoRepuesto });
+            toast({
+                title: 'Exito',
+                description: 'Pago actualizado con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingRepuestos(false);
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al actualizar el pago', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar el pago',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    }; 
 
     return (
         <Box maxW="100%" mx="auto" h='auto' minHeight='100vh' p="4" backgroundImage={fondo} backgroundColor='rgba(0, 0, 0, 0.7)' backgroundBlendMode='overlay'>
@@ -418,7 +484,153 @@ const RegistroCompleto = ({apiRender}) => {
                                         <Text><strong>Patente:</strong> {registro.Motos[0].patente}</Text>
                                         <Text mt='8px'><strong>KM:</strong> {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}</Text>
                                         <Text mt='8px'><strong>Servicio:</strong> {registro.Servicios[0].descripcion}</Text>
-                                        <Text mt='8px'><strong>Monto:</strong> ${registro.Servicios[0].monto}</Text>
+                                        <Box
+                                            display='flex'
+                                            mt='5px'
+                                            >
+                                        <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'>Monto de Mano de Obra:</Text>
+                                        {isEditingManoObra ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    >
+                                                    <Input
+                                                        alignSelf='center'
+                                                        type="number" 
+                                                        value={montoManoObra} 
+                                                        onChange={handleChangeManoObra} 
+                                                        placeholder="Introduce el monto"
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSaveManoObra(registro.Servicios[0].clienteId)} 
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text 
+                                                            onClick={() => setIsEditingManoObra(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].montoManoObra}</Text>
+                                                    <Text   
+                                                        as='button' 
+                                                        onClick={() => setIsEditingManoObra(true)} 
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Box
+                                            display='flex'
+                                            mt='5px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'>Monto de Repuestos:</Text>
+                                            {isEditingRepuestos ? (
+                                                    <Box
+                                                        display='flex'
+                                                        flexDir={['column','row','row']}
+                                                        columnGap='10px'
+                                                        >
+                                                        <Input
+                                                            alignSelf='center'
+                                                            type="number" 
+                                                            value={montoRepuesto} 
+                                                            onChange={handleChangeRepuestoMonto} 
+                                                            placeholder="Introduce el monto"
+                                                            size="md"
+                                                            w='100%'
+                                                            ml='8px'
+                                                        />
+                                                        <Flex
+                                                            flexDir='row'
+                                                            columnGap={['5px','10px','10px']}
+                                                            justifyContent='center'
+                                                            >
+                                                            <Text
+                                                                as='button'
+                                                                onClick={() => handleSaveRepuestoMonto(registro.Servicios[0].clienteId)} 
+                                                                size="sm"
+                                                                _hover={{
+                                                                    transform: 'scale(1.1)'
+                                                                }}
+                                                                fontWeight='bold'
+                                                                color='blue'
+                                                                >
+                                                                Guardar
+                                                            </Text>
+                                                            <Text 
+                                                                onClick={() => setIsEditingRepuestos(false)}
+                                                                as='button'
+                                                                size="sm"
+                                                                _hover={{
+                                                                    transform: 'scale(1.1)'
+                                                                }}
+                                                                fontWeight='bold'
+                                                                color='red'
+                                                                >
+                                                                Cancelar
+                                                            </Text>
+                                                        </Flex>
+                                                    </Box>
+                                                ) : (
+                                                    <Box
+                                                        display='flex'
+                                                        columnGap='10px'
+                                                        >
+                                                        <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].montoRepuesto}</Text>
+                                                        <Text   
+                                                            as='button' 
+                                                            onClick={() => setIsEditingRepuestos(true)} 
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            color='red'
+                                                            fontWeight='bold'
+                                                            >
+                                                            Editar
+                                                        </Text>
+                                                    </Box>
+                                                )}
+                                        </Box>
+                                        <Text mt='8px'><strong>Monto Total:</strong> ${registro.Servicios[0].monto}</Text>
                                         <Box
                                             display='flex'
                                             mt='6px'

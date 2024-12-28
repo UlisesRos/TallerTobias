@@ -13,7 +13,8 @@ function ServicioForm({apiRender}) {
     const [ formData, setFormData ] = useState({
         descripcion: '',
         fechaEntrega: new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }),
-        monto: '',
+        montoManoObra: '',
+        montoRepuesto: '',
         proximoServicio: '',
         descripcionProximoServicio: '',
         pago: '',
@@ -34,7 +35,7 @@ function ServicioForm({apiRender}) {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        if(!formData.descripcion || !formData.monto){
+        if(!formData.descripcion || !formData.montoManoObra || !formData.montoRepuesto){
             toast({
                 title: 'Error',
                 description: 'Completa todos los campos',
@@ -196,23 +197,44 @@ function ServicioForm({apiRender}) {
                         </FormControl>
 
                         <FormControl 
-                            id='monto'
+                            id='montoManoObra'
                             isRequired
                             >
                             <FormLabel
                                 textAlign='center'
                                 >
-                                $ Monto
+                                $ Monto Mano de Obra
                             </FormLabel>
                             <Input
-                                value={formData.monto}
+                                value={formData.montoManoObra}
                                 onChange={handleChange}
                                 fontWeight='medium'
                                 textAlign='center'
                                 w='280px' 
                                 type='number'
-                                name='monto'
-                                placeholder='Ingresa el monto a cobrar'
+                                name='montoManoObra'
+                                placeholder='Ingresa el monto a cobrar de mano de obra'
+                                />
+                        </FormControl>
+
+                        <FormControl 
+                            id='montoRepuesto'
+                            isRequired
+                            >
+                            <FormLabel
+                                textAlign='center'
+                                >
+                                $ Monto de Repuestos
+                            </FormLabel>
+                            <Input
+                                value={formData.montoRepuesto}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px' 
+                                type='number'
+                                name='montoRepuesto'
+                                placeholder='Ingresa el monto a cobrar de repuestos'
                                 />
                         </FormControl>
 

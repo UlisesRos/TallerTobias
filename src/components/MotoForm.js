@@ -86,7 +86,7 @@ function MotoForm({apiRender}) {
             display='flex'
             flexDir='column'
             alignItems='center'
-            h='100vh'
+            h='110vh'
             backgroundImage={fondo} 
             backgroundColor='rgba(0, 0, 0, 0.7)' 
             backgroundBlendMode='overlay'

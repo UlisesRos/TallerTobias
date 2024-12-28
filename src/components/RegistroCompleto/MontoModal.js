@@ -3,11 +3,11 @@ import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, Modal
 const MontoModal = ({registrosFiltrados}) => {
 
     // Total de ganancias acumuladas
-        const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
-        const pagoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].pago));
+        const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].montoManoObra));
+        const montoTotal = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
         const deudaNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].deuda));
-        const sumaMonto = montoNumerico.reduce((ac, va) => ac + va, 0);
-        const sumaPago = pagoNumerico.reduce((ac, va) => ac + va, 0);
+        const sumaMontoManoObra = montoNumerico.reduce((ac, va) => ac + va, 0);
+        const sumaMontoTotal = montoTotal.reduce((ac, va) => ac + va, 0);
         const sumaDeuda = deudaNumerico.reduce((ac, va) => ac + va, 0);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,7 +22,7 @@ const MontoModal = ({registrosFiltrados}) => {
                 _hover={{
                     color: 'black',
                     transform: 'scale(1.1)',
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
+                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(56, 31, 31, 0.2)"
                 }}
                 onClick={onOpen}
                 >
@@ -44,7 +44,7 @@ const MontoModal = ({registrosFiltrados}) => {
                             fontSize='lg'
                             mb='10px'
                             >
-                            <strong>Ganancia Total:</strong> ${sumaMonto}
+                            <strong>Ganancia Total de Mano de Obra:</strong> ${sumaMontoManoObra}
                         </Text>
 
                         <Text
@@ -52,7 +52,7 @@ const MontoModal = ({registrosFiltrados}) => {
                             fontSize='lg'
                             mb='10px'
                             >
-                            <strong>Ganancia Neta (sin deuda):</strong> ${sumaPago}
+                            <strong>Ganancia Total con Repuestos:</strong> ${sumaMontoTotal}
                         </Text>
 
                         <Text
