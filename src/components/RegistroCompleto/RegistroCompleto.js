@@ -69,8 +69,9 @@ const RegistroCompleto = ({apiRender}) => {
 
     // funcion para refrescar los usuarios
     const fetchUsuarios = async () => {
-        const response = await axios.get(`${apiRender}/registrocompleto`);
-        setUserData(response.data);
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000);
     };
 
     // Ver Modal con los datos del cliente
@@ -85,7 +86,6 @@ const RegistroCompleto = ({apiRender}) => {
             try {
                 await axios.delete(`${apiRender}/registrocompleto/${id}`);
                 setRegistros(registros.filter(registro => registro.id !== id));
-                fetchUsuarios()
                 toast({
                     title: 'Exito!',
                     description: 'El cliente fue eliminado con exito',
