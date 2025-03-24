@@ -46,7 +46,6 @@ const RegistroCompleto = ({apiRender}) => {
     const [isEditingManoObra, setIsEditingManoObra] = useState(false);
     const [isEditingRepuestos, setIsEditingRepuestos] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
-    const [userData, setUserData] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     //Notificaciones
