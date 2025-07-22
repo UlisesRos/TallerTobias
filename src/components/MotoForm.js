@@ -12,7 +12,6 @@ function MotoForm({apiRender}) {
     const [ formData, setFormData ] = useState({
         marca:'',
         modelo:'',
-        patente:'',
         km:'',
         clienteId
     });
@@ -31,21 +30,10 @@ function MotoForm({apiRender}) {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        if(!formData.marca || !formData.modelo || !formData.patente){
+        if(!formData.marca || !formData.modelo){
             toast({
                 title: 'Error',
                 description: 'Completa todos los campos',
-                status: 'error',
-                duration: 5000,
-                isClosable: true
-            })
-            return
-        }
-
-        if(!(formData.patente.length > 5) || !(formData.patente.length < 8)){
-            toast({
-                title: 'Error',
-                description: 'La patente no tiene el formato adecuado.',
                 status: 'error',
                 duration: 5000,
                 isClosable: true
@@ -202,27 +190,6 @@ function MotoForm({apiRender}) {
                                 type='text'
                                 name='modelo'
                                 placeholder='Ingresa el modelo de la moto'
-                                />
-                        </FormControl>
-
-                        <FormControl 
-                            id='patente'
-                            isRequired
-                            >
-                            <FormLabel
-                                textAlign='center'
-                                >
-                                Patente
-                            </FormLabel>
-                            <Input
-                                value={formData.patente}
-                                onChange={handleChange}
-                                fontWeight='medium'
-                                textAlign='center'
-                                w='280px' 
-                                type='text'
-                                name='patente'
-                                placeholder='Ingresa la patente de la moto'
                                 />
                         </FormControl>
 

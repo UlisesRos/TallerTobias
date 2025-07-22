@@ -4,7 +4,6 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Modal
 const EditModal = ({ isOpen, onClose, registro, onSave }) => {
     const [formData, setFormData] = useState({
         nombre: '',
-        patente: '',
         marca: '',
         modelo: '',
         descripcion: '',
@@ -18,7 +17,6 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
         if (registro) {
             setFormData({
                 nombre: registro.nombre || '',
-                patente: registro.Motos[0]?.patente || '',
                 marca: registro.Motos[0]?.marca || '',
                 modelo: registro.Motos[0]?.modelo || '',
                 descripcion: registro.Servicios[0]?.descripcion || '',
@@ -55,14 +53,6 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
                         <Input
                             name="nombre"
                             value={formData.nombre}
-                            onChange={handleChange}
-                        />
-                    </FormControl>
-                    <FormControl mb={4}>
-                        <FormLabel>Patente</FormLabel>
-                        <Input
-                            name="patente"
-                            value={formData.patente}
                             onChange={handleChange}
                         />
                     </FormControl>

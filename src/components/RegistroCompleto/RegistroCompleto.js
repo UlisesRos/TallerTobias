@@ -479,7 +479,6 @@ const RegistroCompleto = ({apiRender}) => {
                                     </Box>
                                     </AccordionButton>
                                     <AccordionPanel pb={4} textAlign='start'>
-                                        <Text><strong>Patente:</strong> {registro.Motos[0].patente}</Text>
                                         <Text mt='8px'><strong>KM:</strong> {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}</Text>
                                         <Text mt='8px'><strong>Servicio:</strong> {registro.Servicios[0].descripcion}</Text>
                                         <Box
