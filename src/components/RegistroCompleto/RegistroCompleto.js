@@ -538,7 +538,7 @@ const RegistroCompleto = ({apiRender}) => {
                                                     display='flex'
                                                     columnGap='10px'
                                                     >
-                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].montoManoObra}</Text>
+                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${(registro.Servicios[0].montoManoObra).toLocaleString("es-AR")}</Text>
                                                     <Text   
                                                         as='button' 
                                                         onClick={() => setIsEditingManoObra(true)} 
@@ -611,7 +611,7 @@ const RegistroCompleto = ({apiRender}) => {
                                                         display='flex'
                                                         columnGap='10px'
                                                         >
-                                                        <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].montoRepuesto}</Text>
+                                                        <Text ml='8px' alignSelf='center' fontSize="md" >${(registro.Servicios[0].montoRepuesto).toLocaleString("es-AR")}</Text>
                                                         <Text   
                                                             as='button' 
                                                             onClick={() => setIsEditingRepuestos(true)} 
@@ -685,7 +685,7 @@ const RegistroCompleto = ({apiRender}) => {
                                                     display='flex'
                                                     columnGap='10px'
                                                     >
-                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].pago}</Text>
+                                                    <Text ml='8px' alignSelf='center' fontSize="md" >${registro.Servicios[0].pago.toLocaleString("es-AR")}</Text>
                                                     <Text   
                                                         as='button' 
                                                         onClick={() => setIsEditing(true)} 

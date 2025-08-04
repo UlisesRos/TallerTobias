@@ -2,13 +2,19 @@ import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, Modal
 
 const MontoModal = ({registrosFiltrados}) => {
 
+    console.log(registrosFiltrados.map(registro => parseInt(registro.Servicios[0].montoRepuesto)))
+
     // Total de ganancias acumuladas
         const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].montoManoObra));
-        const montoTotal = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].monto));
         const deudaNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].deuda));
         const sumaMontoManoObra = montoNumerico.reduce((ac, va) => ac + va, 0);
-        const sumaMontoTotal = montoTotal.reduce((ac, va) => ac + va, 0);
         const sumaDeuda = deudaNumerico.reduce((ac, va) => ac + va, 0);
+        const sumaMontoRepuestos = parseFloat(
+            registrosFiltrados
+                .map(registro => parseInt(registro.Servicios[0].montoRepuesto) * 0.10)
+                .reduce((acc, val) => acc + val, 0)
+            );
+        const sumaTotal = sumaMontoManoObra + sumaMontoRepuestos
 
     const { isOpen, onOpen, onClose } = useDisclosure();
         
@@ -44,7 +50,7 @@ const MontoModal = ({registrosFiltrados}) => {
                             fontSize='lg'
                             mb='10px'
                             >
-                            <strong>Ganancia Total de Mano de Obra:</strong> ${sumaMontoManoObra}
+                            <strong>Ganancia Total de Mano de Obra:</strong> ${sumaMontoManoObra.toLocaleString("es-AR")}
                         </Text>
 
                         <Text
@@ -52,14 +58,14 @@ const MontoModal = ({registrosFiltrados}) => {
                             fontSize='lg'
                             mb='10px'
                             >
-                            <strong>Ganancia Total con Repuestos:</strong> ${sumaMontoTotal}
+                            <strong>Ganancia Total con Repuestos:</strong> ${sumaTotal.toLocaleString("es-AR")}
                         </Text>
 
                         <Text
                             textAlign='center'
                             fontSize='lg'
                             >
-                            <strong>Total Deudas:</strong> ${sumaDeuda}
+                            <strong>Total Deudas:</strong> ${sumaDeuda.toLocaleString("es-AR")}
                         </Text>
                     </ModalBody>
 
