@@ -149,11 +149,6 @@ const RegistroCompleto = ({apiRender}) => {
         const deudaA = Math.max(...a.Servicios.map((servicio) => servicio.deuda));
         const deudaB = Math.max(...b.Servicios.map((servicio) => servicio.deuda));
         return deudaB - deudaA;
-    })
-    .sort((a, b) => {
-        const fechaA = new Date(a.Servicios[0].fechaEntrega);
-        const fechaB = new Date(b.Servicios[0].fechaEntrega);
-        return fechaB - fechaA;
     });
 
 
