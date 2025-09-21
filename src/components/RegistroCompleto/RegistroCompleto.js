@@ -149,6 +149,11 @@ const RegistroCompleto = ({apiRender}) => {
         const deudaA = Math.max(...a.Servicios.map((servicio) => servicio.deuda));
         const deudaB = Math.max(...b.Servicios.map((servicio) => servicio.deuda));
         return deudaB - deudaA;
+    })
+    .sort((a, b) => {
+        const fechaA = new Date(a.Servicios[0].fechaEntrega);
+        const fechaB = new Date(b.Servicios[0].fechaEntrega);
+        return fechaB - fechaA;
     });
 
 
@@ -708,6 +713,7 @@ const RegistroCompleto = ({apiRender}) => {
                                                 : ' -'
                                             }
                                         </Text>
+                                        <Text mt='8px'><strong>KM para Prox. Serv.:</strong> {registro.Servicios[0].kmProximoServicio ? `${registro.Servicios[0].kmProximoServicio} KMS` : 'No hay datos'}</Text>
                                         <Text mt='8px'><strong>Desc. Prox. Servicio:</strong> {registro.Servicios[0].descripcionProximoServicio ? registro.Servicios[0].descripcionProximoServicio : ' -'}</Text>
                                         <Text mt='8px'><strong>Fecha de Entrega:</strong> {formatDate((registro.Servicios[0].fechaEntrega).slice(0, 10))}</Text>
                                         <Flex

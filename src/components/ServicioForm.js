@@ -16,6 +16,7 @@ function ServicioForm({apiRender}) {
         montoManoObra: '',
         montoRepuesto: '',
         proximoServicio: '',
+        kmProximoServicio: '',
         descripcionProximoServicio: '',
         pago: '',
         clienteId
@@ -275,6 +276,26 @@ function ServicioForm({apiRender}) {
                                 type='number'
                                 name='proximoServicio'
                                 placeholder='Ingresa los dias para el proximo servicio'
+                                />
+                        </FormControl>
+
+                        <FormControl 
+                            id='kmProximoServicio'
+                            >
+                            <FormLabel
+                                textAlign='center'
+                                >
+                                Kilometros para el Proximo Servicio
+                            </FormLabel>
+                            <Input
+                                value={formData.kmProximoServicio}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px' 
+                                type='number'
+                                name='kmProximoServicio'
+                                placeholder='Ingresa los kilometros para el proximo servicio'
                                 />
                         </FormControl>
 
