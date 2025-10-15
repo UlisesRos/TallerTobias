@@ -7,6 +7,7 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ formData, setFormData ] = useState({
         nombre: '',
+        email: '',
         moto: '',
         descripcion: '',
         fecha: selectedDate
@@ -30,13 +31,25 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
         if(!formData.nombre || !formData.moto || !formData.descripcion) {
             toast({
                 title: 'Error',
-                description: 'Por favor completa todos los campos.',
+                description: 'Por favor completa todos los campos obligatorios.',
                 status: 'error',
                 duration: 5000,
                 isClosable: true
             });
             return;
         };
+
+        // Validar email si fue proporcionado
+        if(formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            toast({
+                title: 'Error',
+                description: 'Por favor ingresa un email válido.',
+                status: 'error',
+                duration: 5000,
+                isClosable: true
+            });
+            return;
+        }
 
         try {
             const response = await axios.post(`${apiRender}/postturno`, formData);
@@ -50,17 +63,26 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
 
             console.log('Respuesta del Servidor', response.data);
 
+            // Resetear el formulario
+            setFormData({
+                nombre: '',
+                email: '',
+                moto: '',
+                descripcion: '',
+                fecha: selectedDate
+            });
+
             onClose()
             window.location.reload()
         } catch (error) {
+            console.error('Error al enviar los datos al back:', error.response?.data || error.message);
             toast({
                 title: 'Error',
-                description: 'Hubo un problema al registrar el turno',
+                description: error.response?.data?.message || 'Hubo un problema al registrar el turno',
                 status: 'error',
                 duration: 5000,
                 isClosable: true
-            })
-            console.error('Error al enviar los datos al back')
+            });
         }
     }
 
@@ -87,27 +109,15 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent w='80%'>
-                        <ModalHeader
-                            >
-                                Agregar Turno
+                        <ModalHeader>
+                            Agregar Turno
                         </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody
-                        mb='15px'
-                        >
-                        <form
-                            onSubmit={handleSubmit}
-                            >
-                            <Stack
-                                spacing={4}
-                                >
-                                <FormControl
-                                    id="nombre"
-                                    isRequired
-                                    >
-                                    <FormLabel>
-                                        Nombre
-                                    </FormLabel>
+                    <ModalBody mb='15px'>
+                        <form onSubmit={handleSubmit}>
+                            <Stack spacing={4}>
+                                <FormControl id="nombre" isRequired>
+                                    <FormLabel>Nombre</FormLabel>
                                     <Input
                                         value={formData.nombre}
                                         onChange={handleChange}
@@ -115,16 +125,28 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                                         name='nombre'
                                         w='100%'
                                         placeholder='Ingresa el nombre'
-                                        />
+                                    />
                                 </FormControl>
 
-                                <FormControl
-                                    id="moto"
-                                    isRequired
-                                    >
+                                <FormControl id="email">
                                     <FormLabel>
-                                        Moto
+                                        Email 
+                                        <Box as="span" fontSize="sm" color="gray.500" ml={2}>
+                                            (Opcional - para recordatorios)
+                                        </Box>
                                     </FormLabel>
+                                    <Input
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        type="email"
+                                        name='email'
+                                        w='100%'
+                                        placeholder='ejemplo@email.com'
+                                    />
+                                </FormControl>
+
+                                <FormControl id="moto" isRequired>
+                                    <FormLabel>Moto</FormLabel>
                                     <Input
                                         value={formData.moto}
                                         onChange={handleChange}
@@ -132,16 +154,11 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                                         name='moto'
                                         w='100%'
                                         placeholder='Ingresa la moto'
-                                        />
+                                    />
                                 </FormControl>
 
-                                <FormControl
-                                    id="descripcion"
-                                    isRequired
-                                    >
-                                    <FormLabel>
-                                        Trabajo a realizar
-                                    </FormLabel>
+                                <FormControl id="descripcion" isRequired>
+                                    <FormLabel>Trabajo a realizar</FormLabel>
                                     <Input
                                         value={formData.descripcion}
                                         onChange={handleChange}
@@ -149,7 +166,7 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                                         name='descripcion'
                                         w='100%'
                                         placeholder='Ingresa el trabajo a realizar'
-                                        />
+                                    />
                                 </FormControl>
 
                                 <Button
@@ -163,7 +180,7 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                                         border: 'solid 1px black',
                                         boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
                                     }}
-                                    >
+                                >
                                     Registrar Turno
                                 </Button>
                             </Stack>

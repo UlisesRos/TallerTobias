@@ -249,8 +249,16 @@ function Calendario({apiRender}) {
                                         borderRadius='md'
                                         w={['95%','70%',"50%"]}
                                         textAlign='center'
-                                        >
+                                    >
                                         <Text fontWeight="bold">{turno.nombre}</Text>
+                                        {turno.email && (
+                                            <Text fontSize="sm">
+                                                📧 {turno.email}
+                                                {turno.recordatorioEnviado && (
+                                                    <Box as="span" ml={2} color="green.300">✓ Recordatorio enviado</Box>
+                                                )}
+                                            </Text>
+                                        )}
                                         <Text><Text as='span' textDecor='underline'>Moto</Text>: {turno.moto}</Text>
                                         <Text><Text as='span' textDecor='underline'>Servicio</Text>: {turno.descripcion}</Text>
                                         <Flex
@@ -259,7 +267,7 @@ function Calendario({apiRender}) {
                                             justifyContent='center'
                                             columnGap='20px'
                                             w='100%'
-                                            >
+                                        >
                                             <RepuestosModal turnosDelDia={turnosDelDia} turnoId={turno.id} apiRender={apiRender} />
                                             <Button
                                                 mt='10px'
@@ -273,7 +281,7 @@ function Calendario({apiRender}) {
                                                     transform: 'scale(1.1)',
                                                 }}
                                                 onClick={() => handleDeleteTurno(turno.id)}
-                                                >
+                                            >
                                                 Eliminar
                                             </Button>
                                         </Flex>

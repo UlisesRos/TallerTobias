@@ -2,8 +2,6 @@ import { Modal, ModalOverlay, ModalCloseButton, ModalContent, ModalHeader, Modal
 
 const MontoModal = ({registrosFiltrados}) => {
 
-    console.log(registrosFiltrados.map(registro => parseInt(registro.Servicios[0].montoRepuesto)))
-
     // Total de ganancias acumuladas
         const montoNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].montoManoObra));
         const deudaNumerico = registrosFiltrados.map(registro => parseInt(registro.Servicios[0].deuda));

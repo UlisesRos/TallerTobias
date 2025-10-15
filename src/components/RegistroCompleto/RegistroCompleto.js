@@ -20,6 +20,7 @@ import {
 import logo from '../../img/motor.png'
 import ClienteModal from './ClienteModal';
 import MontoModal from './MontoModal';
+import DatosServicioModal from './DatosServicioModal';
 import { Link } from 'react-router-dom';
 import casco from '../../img/casco.png'
 import moto from '../../img/moto.png'
@@ -47,6 +48,8 @@ const RegistroCompleto = ({apiRender}) => {
     const [isEditingRepuestos, setIsEditingRepuestos] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [ isDatosServicioModalOpen, setIsDatosServicioModalOpen ] = useState(false);
+    const [ clienteSeleccionadoServicio, setClienteSeleccionadoServicio ] = useState(null);
 
     //Notificaciones
     const toast = useToast()
@@ -246,7 +249,13 @@ const RegistroCompleto = ({apiRender}) => {
                 isClosable: true
             });
         }
-    }; 
+    };
+    
+    // Funcion para ficha tecnica de servicios
+    const handleDatosServicioClick = (cliente) => {
+        setClienteSeleccionadoServicio(cliente);
+        setIsDatosServicioModalOpen(true);
+    };
 
     return (
         <Box maxW="100%" mx="auto" h='auto' minHeight='100vh' p="4" backgroundImage={fondo} backgroundColor='rgba(0, 0, 0, 0.7)' backgroundBlendMode='overlay'>
@@ -731,6 +740,14 @@ const RegistroCompleto = ({apiRender}) => {
                                             </Text>
                                             <Button
                                                 fontSize='sm'
+                                                colorScheme='green'
+                                                color='black'
+                                                onClick={() => handleDatosServicioClick(registro)}
+                                            >
+                                                Ficha Tecnica
+                                            </Button>
+                                            <Button
+                                                fontSize='sm'
                                                 colorScheme='red'
                                                 color='black'
                                                 ml='3px'
@@ -755,6 +772,15 @@ const RegistroCompleto = ({apiRender}) => {
             </Flex>
             { clienteSeleccionado && (
                 <ClienteModal isOpen={isOpen} onClose={onClose} clienteSeleccionado={clienteSeleccionado} />
+            )}
+            {clienteSeleccionadoServicio && (
+                <DatosServicioModal
+                    isOpen={isDatosServicioModalOpen}
+                    onClose={() => setIsDatosServicioModalOpen(false)}
+                    clienteId={clienteSeleccionadoServicio.id}
+                    clienteNombre={clienteSeleccionadoServicio.nombre}
+                    apiRender={apiRender}
+                />
             )}
         </Box>
     );
