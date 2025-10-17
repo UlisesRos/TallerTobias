@@ -9,7 +9,7 @@ const MontoModal = ({registrosFiltrados}) => {
         const sumaDeuda = deudaNumerico.reduce((ac, va) => ac + va, 0);
         const sumaMontoRepuestos = parseFloat(
             registrosFiltrados
-                .map(registro => parseInt(registro.Servicios[0].montoRepuesto) * 0.10)
+                .map(registro => parseInt(registro.Servicios[0].montoRepuesto) * 0.20)
                 .reduce((acc, val) => acc + val, 0)
             );
         const sumaTotal = sumaMontoManoObra + sumaMontoRepuestos
