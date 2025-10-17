@@ -330,7 +330,7 @@ function ServicioForm({apiRender}) {
                                 transform: 'scale(1.1)',
                             }}
                             >
-                            Registrar Moto
+                            Registrar Servicio
                         </Button>
                     </Stack>
                 </form>
