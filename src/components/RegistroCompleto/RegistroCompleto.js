@@ -17,7 +17,7 @@ import {
     AccordionPanel,
     Spinner
 } from '@chakra-ui/react';
-import logo from '../../img/motor.png'
+import logo from '../../img/motor.jpeg'
 import ClienteModal from './ClienteModal';
 import MontoModal from './MontoModal';
 import DatosServicioModal from './DatosServicioModal';
@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom';
 import casco from '../../img/casco.png'
 import moto from '../../img/moto.png'
 import mecanico from '../../img/mecanico.png'
-import fondo from '../../img/fondo.jpg'
+import fondo from '../../img/fondo.jpeg'
 import pagado from '../../img/pagado.png'
 import deuda from '../../img/nopago.png'
 

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
-import logo from '../img/motor.png'
-import fondo from '../img/fondo.jpg'
+import logo from '../img/motor.jpeg'
+import fondo from '../img/fondo.jpeg'
 
 function ServicioForm({apiRender}) {
 

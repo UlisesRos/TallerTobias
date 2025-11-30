@@ -1,12 +1,12 @@
 import { Box, Button, Flex, Text, VStack, Image, useToast, Spinner } from '@chakra-ui/react';
-import logo from '../../img/motor.png'
+import logo from '../../img/motor.jpeg'
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import { format, startOfWeek, addDays, subDays, isSameDay } from "date-fns";
 import { es } from 'date-fns/locale'
 import axios from 'axios';
 import ModalTurno from './ModalTurno';
-import fondo from '../../img/fondo.jpg'
+import fondo from '../../img/fondo.jpeg'
 import RepuestosModal from './RepuestosModal';
 
 

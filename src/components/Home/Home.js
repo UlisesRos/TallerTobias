@@ -1,5 +1,5 @@
 import { Button, Flex, Heading, Image } from '@chakra-ui/react'
-import logo from '../../img/motor.png'
+import logo from '../../img/motor.jpeg'
 import TypingEffect from './TypingEffect'
 import { Link } from 'react-router-dom'
 

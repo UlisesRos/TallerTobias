@@ -2,9 +2,9 @@ import { Flex, Box, FormControl, FormLabel, Input, Stack, Button, useToast, Imag
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
-import logo from '../img/motor.png'
+import logo from '../img/motor.jpeg'
 import axios from 'axios'
-import fondo from '../img/fondo.jpg'
+import fondo from '../img/fondo.jpeg'
 
 
 function ClientForm({apiRender}) {
