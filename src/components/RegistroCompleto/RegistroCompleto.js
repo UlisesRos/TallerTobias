@@ -34,10 +34,10 @@ const RegistroCompleto = ({apiRender}) => {
     const [registros, setRegistros] = useState([]);
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
     const [filtrados, setFiltrados] = useState([]);
-    const [verUltimos30Dias, setVerUltimos30Dias] = useState(false);
-    const [ordenProximoServicio, setOrdenProximoServicio] = useState(false);
     const [busqueda, setBusqueda] = useState('')
-    const [filtrarPorDeuda, setFiltrarPorDeuda] = useState(false);
+    const [filtroProximoServicio, setFiltroProximoServicio] = useState('');
+    const [filtroDeuda, setFiltroDeuda] = useState('');
+    const [ordenFecha, setOrdenFecha] = useState('');
     const [mesSeleccionado, setMesSeleccionado] = useState('')
     const [añoSeleccionado, setAñoSeleccionado] = useState('')
     const [pago, setPago] = useState(0);
@@ -118,22 +118,11 @@ const RegistroCompleto = ({apiRender}) => {
         setAñoSeleccionado(e.target.value)
     }
 
-    //Funcion para buscar por nombre
-    const registrosFiltrados = registros
+    // Función mejorada de filtrado y ordenamiento
+const registrosFiltrados = registros
+    // Filtro por nombre
     .filter((registro) => registro.nombre.toLowerCase().includes(busqueda.toLowerCase()))
-    .filter((registro) => {
-        if (!verUltimos30Dias) return true;
-        // Aquí calcula la diferencia de días y filtra
-        const fechaEntrega = new Date(registro.Servicios[0].fechaEntrega);
-        const hoy = new Date();
-        const diferenciaDias = (hoy - fechaEntrega) / (1000 * 60 * 60 * 24);
-        return diferenciaDias <= 30;
-    })
-    // Ordenar por próximo servicio si está activado
-    .sort((a, b) => {
-        if (!ordenProximoServicio) return 0;
-        return a.Servicios[0].proximoServicio - b.Servicios[0].proximoServicio;
-    })
+    // Filtro por mes y año
     .filter((registro) => {
         const fechaEntrega = new Date(registro.Servicios[0].fechaEntrega);
         const mes = fechaEntrega.getMonth() + 1;
@@ -143,17 +132,59 @@ const RegistroCompleto = ({apiRender}) => {
             (!añoSeleccionado || año === parseInt(añoSeleccionado, 10))
         );
     })
-    .filter((registro) => {
-        if (!filtrarPorDeuda) return true; // Si no está activado, no filtra por deuda
-        return registro.Servicios.some((servicio) => servicio.deuda > 1);
+    // Filtro por próximo servicio
+        .filter((registro) => {
+        if (filtroProximoServicio === 'todos' || filtroProximoServicio === '') return true;
+        
+        const proximoServicio = parseInt(registro.Servicios[0].proximoServicio, 10);
+        
+        if (filtroProximoServicio === 'realizar') {
+            return proximoServicio === -1;
+        } else if (filtroProximoServicio === 'pendiente') {
+            return proximoServicio > 0;
+        } else if (filtroProximoServicio === 'sin-proximo') {
+            return !registro.Servicios[0].proximoServicio || registro.Servicios[0].proximoServicio === '';
+        }
+        return true;
     })
-    .sort((a, b) => {
-        if (!filtrarPorDeuda) return 0; // No ordena si el filtro no está activo
-        const deudaA = Math.max(...a.Servicios.map((servicio) => servicio.deuda));
-        const deudaB = Math.max(...b.Servicios.map((servicio) => servicio.deuda));
-        return deudaB - deudaA;
+    // Filtro por deuda
+    .filter((registro) => {
+        if (filtroDeuda === 'todos' || filtroDeuda === '') return true;
+        if (filtroDeuda === 'con-deuda') {
+            return registro.Servicios[0].deuda > 0;
+        } else if (filtroDeuda === 'sin-deuda') {
+            return registro.Servicios[0].deuda === 0;
+        }
+        return true;
+    })
+    // Ordenamiento
+        .sort((a, b) => {
+        // Primero ordenar por próximo servicio si está activo el filtro
+        if (filtroProximoServicio === 'pendiente') {
+            const proximoA = parseInt(a.Servicios[0].proximoServicio, 10);
+            const proximoB = parseInt(b.Servicios[0].proximoServicio, 10);
+            return proximoA - proximoB;
+        }
+        
+        if (filtroProximoServicio === 'realizar') {
+            const fechaA = new Date(a.Servicios[0].fechaEntrega);
+            const fechaB = new Date(b.Servicios[0].fechaEntrega);
+            // Si ordenFecha está vacío, usar 'recientes' por defecto
+            return (ordenFecha === 'antiguos') ? fechaA - fechaB : fechaB - fechaA;
+        }
+        
+        if (filtroDeuda === 'con-deuda') {
+            const deudaA = a.Servicios[0].deuda;
+            const deudaB = b.Servicios[0].deuda;
+            return deudaB - deudaA;
+        }
+        
+        // Ordenamiento por fecha de creación
+        const fechaA = new Date(a.Servicios[0].fechaEntrega);
+        const fechaB = new Date(b.Servicios[0].fechaEntrega);
+        // Si ordenFecha está vacío, usar 'recientes' por defecto
+        return (ordenFecha === 'antiguos') ? fechaA - fechaB : fechaB - fechaA;
     });
-
 
     // Formato de fecha DD-MM-YYYY
     const formatDate = (dateString) => {
@@ -369,32 +400,62 @@ const RegistroCompleto = ({apiRender}) => {
                         );
                     })}
                 </Select>
-                <Button onClick={() => setVerUltimos30Dias(!verUltimos30Dias)} colorScheme="blue" color='black' mb="4" _hover={{
-                    color: 'black',
-                    transform: 'scale(1.1)',
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
-                }}>
-                    {verUltimos30Dias ? 'Mostrar Todos' : 'Filtrar ultimos 30 dias'}
-                </Button>
-                <Button onClick={() => setOrdenProximoServicio(!ordenProximoServicio)} colorScheme="green" mb="4" color='black' _hover={{
-                    color: 'black',
-                    transform: 'scale(1.1)',
-                    boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.3), 0px 10px 15px rgba(0, 0, 0, 0.2)"
-                }}>
-                    {ordenProximoServicio ? 'Ordenar por Fecha de Creacion' : 'Ordenar por Próximo Servicio'}
-                </Button>
-                <Button
-                    colorScheme={filtrarPorDeuda ? "red" : "teal"}
-                    color='black'
-                    onClick={() => setFiltrarPorDeuda((prev) => !prev)}
+                <Select
+                    placeholder="Estado del servicio"
+                    value={filtroProximoServicio}
+                    onChange={(e) => setFiltroProximoServicio(e.target.value)}
+                    w="200px"
                     mb={4}
+                    bg="white"
                 >
-                    {filtrarPorDeuda ? "Mostrar Todos" : "Filtrar por Deuda"}
-                </Button>
-                <Flex>
-                    <MontoModal registrosFiltrados={registrosFiltrados} />
-                </Flex>
+                    <option value="todos">Todos</option>
+                    <option value="realizar">Realizar Proximo Servicio</option>
+                    <option value="pendiente">Servicio Pendiente</option>
+                    <option value="sin-proximo">Sin próximo servicio</option>
+                </Select>
 
+                {/* Filtro por Deuda */}
+                <Select
+                    placeholder="Estado de deuda"
+                    value={filtroDeuda}
+                    onChange={(e) => setFiltroDeuda(e.target.value)}
+                    w="200px"
+                    mb={4}
+                    bg="white"
+                >
+                    <option value="todos">Todos</option>
+                    <option value="con-deuda">Con deuda</option>
+                    <option value="sin-deuda">Sin deuda</option>
+                </Select>
+
+                {/* Ordenar por Fecha */}
+                <Select
+                    placeholder="Ordenar por fecha"
+                    value={ordenFecha}
+                    onChange={(e) => setOrdenFecha(e.target.value)}
+                    w="200px"
+                    mb={4}
+                    bg="white"
+                >
+                    <option value="recientes">Más recientes</option>
+                    <option value="antiguos">Más antiguos</option>
+                </Select>
+                <Flex gap='15px' direction={['column','row','row']}>
+                    <MontoModal registrosFiltrados={registrosFiltrados} />
+                    <Button
+                        colorScheme="red"
+                        onClick={() => {
+                            setBusqueda('');
+                            setMesSeleccionado('');
+                            setAñoSeleccionado('');
+                            setFiltroProximoServicio('todos');
+                            setFiltroDeuda('todos');
+                            setOrdenFecha('recientes');
+                        }}
+                    >
+                        Limpiar Filtros
+                    </Button>
+                </Flex>
             </Box>
             <Flex
                 w='100%'
@@ -456,14 +517,14 @@ const RegistroCompleto = ({apiRender}) => {
                                             justifyContent='center'
                                             >
                                             <Image src={casco} alt='cliente' w='20px'/>
-                                            <Text fontWeight="bold" textAlign='start' fontSize='lg'>{registro.nombre}</Text>
+                                            <Text textTransform='capitalize' fontWeight="bold" textAlign='start' fontSize='lg'>{registro.nombre}</Text>
                                         </Flex>
 
                                         <Flex
                                             columnGap='10px'
                                             >
                                             <Image src={moto} alt='moto' w='25px' h='25px'/>
-                                            <Text fontWeight="bold" textAlign='start'>{registro.Motos[0].marca} {registro.Motos[0].modelo}</Text>
+                                            <Text textTransform='capitalize' fontWeight="bold" textAlign='start'>{registro.Motos[0].marca} {registro.Motos[0].modelo}</Text>
                                         </Flex>
 
                                         <Flex

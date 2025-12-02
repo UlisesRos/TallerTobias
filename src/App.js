@@ -6,7 +6,7 @@ import RegistroCompleto from './components/RegistroCompleto/RegistroCompleto';
 import Home from './components/Home/Home';
 import Calendario from './components/Calendario/Calendario';
 
-const apiRender = 'https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
+const apiRender ='https://tallertobiasbackend.onrender.com' || 'http://localhost:5000'
 
 function App() {
   return (
