@@ -158,28 +158,29 @@ const DatosServicioModal = ({ isOpen, onClose, clienteId, clienteNombre, apiRend
     const toast = useToast();
 
     useEffect(() => {
-        if (isOpen && clienteId) {
-            setDs(getEstadoInicial(clienteId));
-            cargarDatos();
-        }
-    }, [isOpen, clienteId]);
+        if (!isOpen || !clienteId) return;
 
-    const cargarDatos = async () => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get(`${apiRender}/api/datosservicio/${clienteId}`);
-            if (response.data) {
-                const oldMapped = mapOldToNew(response.data);
-                setDs({ ...getEstadoInicial(clienteId), ...response.data, ...oldMapped, clienteId });
+        setDs(getEstadoInicial(clienteId));
+
+        const cargarDatos = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`${apiRender}/api/datosservicio/${clienteId}`);
+                if (response.data) {
+                    const oldMapped = mapOldToNew(response.data);
+                    setDs({ ...getEstadoInicial(clienteId), ...response.data, ...oldMapped, clienteId });
+                }
+            } catch (error) {
+                if (error.response?.status !== 404) {
+                    toast({ title: 'Advertencia', description: 'No se pudieron cargar datos previos', status: 'warning', duration: 3000, isClosable: true });
+                }
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error) {
-            if (error.response?.status !== 404) {
-                toast({ title: 'Advertencia', description: 'No se pudieron cargar datos previos', status: 'warning', duration: 3000, isClosable: true });
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+
+        cargarDatos();
+    }, [isOpen, clienteId, apiRender, toast]);
 
     const hc = (field, value) => setDs(prev => ({ ...prev, [field]: value }));
 

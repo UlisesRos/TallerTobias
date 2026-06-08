@@ -33,7 +33,6 @@ import deuda from '../../img/nopago.png'
 const RegistroCompleto = ({apiRender}) => {
     const [registros, setRegistros] = useState([]);
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-    const [filtrados, setFiltrados] = useState([]);
     const [busqueda, setBusqueda] = useState('')
     const [filtroProximoServicio, setFiltroProximoServicio] = useState('');
     const [filtroDeuda, setFiltroDeuda] = useState('');
@@ -59,7 +58,6 @@ const RegistroCompleto = ({apiRender}) => {
             try {
                 const response = await axios.get(`${apiRender}/registrocompleto`);
                 setRegistros(response.data);
-                setFiltrados(response.data); // Inicialmente mostrar todos los registros
                 setIsLoading(false)
             } catch (error) {
                 console.error('Error al obtener registros:', error);
@@ -67,7 +65,7 @@ const RegistroCompleto = ({apiRender}) => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiRender]);
 
     // funcion para refrescar los usuarios
     const fetchUsuarios = async () => {

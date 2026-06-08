@@ -48,7 +48,7 @@ function Calendario({apiRender}) {
         };
 
         fetchTurnos()
-    }, [])
+    }, [apiRender])
 
     const handleDeleteTurno = async (id) => {
         try {
