@@ -10,6 +10,7 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
         email: '',
         moto: '',
         descripcion: '',
+        horario: '',
         fecha: selectedDate
     });
 
@@ -69,6 +70,7 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                 email: '',
                 moto: '',
                 descripcion: '',
+                horario: '',
                 fecha: selectedDate
             });
 
@@ -166,6 +168,17 @@ const ModalTurno = ({ selectedDate, apiRender }) => {
                                         name='descripcion'
                                         w='100%'
                                         placeholder='Ingresa el trabajo a realizar'
+                                    />
+                                </FormControl>
+
+                                <FormControl id="horario">
+                                    <FormLabel>Horario</FormLabel>
+                                    <Input
+                                        value={formData.horario}
+                                        onChange={handleChange}
+                                        type="time"
+                                        name='horario'
+                                        w='100%'
                                     />
                                 </FormControl>
 

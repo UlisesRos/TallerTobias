@@ -251,6 +251,9 @@ function Calendario({apiRender}) {
                                         textAlign='center'
                                     >
                                         <Text fontWeight="bold">{turno.nombre}</Text>
+                                        {turno.horario && (
+                                            <Text fontSize="sm">🕐 {turno.horario}</Text>
+                                        )}
                                         {turno.email && (
                                             <Text fontSize="sm">
                                                 📧 {turno.email}
