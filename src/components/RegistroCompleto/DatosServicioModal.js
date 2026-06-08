@@ -122,34 +122,6 @@ const getEstadoInicial = (id) => ({
     otrosTrabajos: '',
 });
 
-// Mapea campos del modelo viejo a los nuevos para clientes existentes
-const mapOldToNew = (data) => {
-    const m = {};
-    if (data.cambioAceiteMotor)       m.cambioAceite = data.cambioAceiteMotor;
-    if (data.diagnosticoBateria)      m.pruebaBateria = data.diagnosticoBateria;
-    if (data.voltajeBateria)          m.medicionBateria = data.voltajeBateria;
-    if (data.revisionRegulador)       m.cambioRegulador = data.revisionRegulador;
-    if (data.revisionSistemaLuces)    m.pruebaDeLuces = data.revisionSistemaLuces;
-    if (data.focosEnMalEstado)        m.recambioFocos = data.focosEnMalEstado;
-    if (data.reparacionCablesDanados) m.reparacionProblemaElectrico = data.reparacionCablesDanados;
-    if (data.cambioTransmision)       m.recambioTransmisionCompleta = data.cambioTransmision;
-    if (data.reduccionCadena)         m.registroLavadoLubricado = data.reduccionCadena;
-    if (data.cambioTornillosCorona)   m.cambioTornillosSeguros = data.cambioTornillosCorona;
-    if (data.cambioTacosMaza)         m.cambioTacosBujesMasa = data.cambioTacosMaza;
-    if (data.lubricacionLimpieza)     m.limpiezaMantenimiento = data.lubricacionLimpieza;
-    if (data.recambioDelanteras && data.recambioDelanteras !== 'NO') {
-        m.frenoDelantero = 'SI';
-        m.otrosFrenoDelantero = data.recambioDelanteras;
-    }
-    if (data.recambioTraseras && data.recambioTraseras !== 'NO') {
-        m.frenoTrasero = 'SI';
-        m.otrosFrenoTrasero = data.recambioTraseras;
-    }
-    if (data.recambioCable)  m.cableFrenoDelantero = data.recambioCable;
-    if (data.otros)          m.otrosTrabajos = data.otros;
-    if (data.recambioLiquido) m.cambioLiquidoHidraulico = data.recambioLiquido;
-    return m;
-};
 
 const DatosServicioModal = ({ isOpen, onClose, clienteId, clienteNombre, apiRender }) => {
     const [ds, setDs] = useState(getEstadoInicial(clienteId));
@@ -167,20 +139,17 @@ const DatosServicioModal = ({ isOpen, onClose, clienteId, clienteNombre, apiRend
             try {
                 const response = await axios.get(`${apiRender}/api/datosservicio/${clienteId}`);
                 if (response.data) {
-                    const oldMapped = mapOldToNew(response.data);
-                    setDs({ ...getEstadoInicial(clienteId), ...response.data, ...oldMapped, clienteId });
+                    setDs({ ...getEstadoInicial(clienteId), ...response.data, clienteId });
                 }
-            } catch (error) {
-                if (error.response?.status !== 404) {
-                    toast({ title: 'Advertencia', description: 'No se pudieron cargar datos previos', status: 'warning', duration: 3000, isClosable: true });
-                }
+            } catch {
+                // sin datos previos, se abre en blanco
             } finally {
                 setIsLoading(false);
             }
         };
 
         cargarDatos();
-    }, [isOpen, clienteId, apiRender, toast]);
+    }, [isOpen, clienteId, apiRender]);
 
     const hc = (field, value) => setDs(prev => ({ ...prev, [field]: value }));
 
