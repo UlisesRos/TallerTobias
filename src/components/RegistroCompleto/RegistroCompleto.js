@@ -15,7 +15,8 @@ import {
     AccordionItem,
     AccordionButton,
     AccordionPanel,
-    Spinner
+    Spinner,
+    Textarea
 } from '@chakra-ui/react';
 import logo from '../../img/motor.jpeg'
 import ClienteModal from './ClienteModal';
@@ -45,6 +46,14 @@ const RegistroCompleto = ({apiRender}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingManoObra, setIsEditingManoObra] = useState(false);
     const [isEditingRepuestos, setIsEditingRepuestos] = useState(false);
+    const [fechaEntrega, setFechaEntrega] = useState('');
+    const [isEditingFechaEntrega, setIsEditingFechaEntrega] = useState(false);
+    const [proximoServicio, setProximoServicio] = useState('');
+    const [isEditingProximoServicio, setIsEditingProximoServicio] = useState(false);
+    const [kmProximoServicio, setKmProximoServicio] = useState('');
+    const [isEditingKmProximoServicio, setIsEditingKmProximoServicio] = useState(false);
+    const [descripcionProximoServicio, setDescripcionProximoServicio] = useState('');
+    const [isEditingDescripcionProximoServicio, setIsEditingDescripcionProximoServicio] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ isDatosServicioModalOpen, setIsDatosServicioModalOpen ] = useState(false);
@@ -226,8 +235,120 @@ const registrosFiltrados = registros
                 isClosable: true
             });
         }
-    }; 
-    
+    };
+
+    const handleChangeFechaEntrega = (e) => {
+        setFechaEntrega(e.target.value);
+    };
+
+    const handleSaveFechaEntrega = async (id) => {
+        try {
+            await axios.put(`${apiRender}/api/updatefechaentrega/${id}`, { fechaEntrega: fechaEntrega || null });
+            toast({
+                title: 'Exito',
+                description: 'Fecha de entrega actualizada con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingFechaEntrega(false);
+        } catch (error) {
+            console.error('Error al actualizar la fecha de entrega', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar la fecha de entrega',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    };
+
+    const handleChangeProximoServicio = (e) => {
+        setProximoServicio(e.target.value);
+    };
+
+    const handleSaveProximoServicio = async (id) => {
+        try {
+            await axios.put(`${apiRender}/api/updateproximoservicio/${id}`, { proximoServicio });
+            toast({
+                title: 'Exito',
+                description: 'Proximo servicio actualizado con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingProximoServicio(false);
+        } catch (error) {
+            console.error('Error al actualizar el proximo servicio', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar el proximo servicio',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    };
+
+    const handleChangeKmProximoServicio = (e) => {
+        setKmProximoServicio(e.target.value);
+    };
+
+    const handleSaveKmProximoServicio = async (id) => {
+        try {
+            await axios.put(`${apiRender}/api/updateproximoservicio/${id}`, { kmProximoServicio });
+            toast({
+                title: 'Exito',
+                description: 'Km para el proximo servicio actualizado con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingKmProximoServicio(false);
+        } catch (error) {
+            console.error('Error al actualizar el km del proximo servicio', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar el km del proximo servicio',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    };
+
+    const handleChangeDescripcionProximoServicio = (e) => {
+        setDescripcionProximoServicio(e.target.value);
+    };
+
+    const handleSaveDescripcionProximoServicio = async (id) => {
+        try {
+            await axios.put(`${apiRender}/api/updateproximoservicio/${id}`, { descripcionProximoServicio });
+            toast({
+                title: 'Exito',
+                description: 'Observaciones del proximo servicio actualizadas con exito',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            });
+            fetchUsuarios()
+            setIsEditingDescripcionProximoServicio(false);
+        } catch (error) {
+            console.error('Error al actualizar las observaciones del proximo servicio', error);
+            toast({
+                title: 'Error',
+                description: 'Hubo un error al actualizar las observaciones del proximo servicio',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    };
+
     const handleSaveManoObra = async (id) => {
         try {
             // Enviar la actualización al backend
@@ -333,7 +454,7 @@ const registrosFiltrados = registros
                                 transform: 'scale(1.1)',
                             }}
                             >
-                            Nuevo Cliente
+                            Nuevo Registro
                         </Button>
                     </Link>
                 </Flex>
@@ -548,7 +669,7 @@ const registrosFiltrados = registros
                                     </AccordionButton>
                                     <AccordionPanel pb={4} textAlign='start'>
                                         <Text mt='8px'><strong>KM:</strong> {registro.Motos[0].km ? `${registro.Motos[0].km} KMS` : '-'}</Text>
-                                        <Text mt='8px'><strong>Servicio:</strong> {registro.Servicios[0].descripcion}</Text>
+                                        <Text mt='8px'><strong>Motivo de Ingreso:</strong> {registro.Servicios[0].descripcion}</Text>
                                         <Box
                                             display='flex'
                                             mt='5px'
@@ -769,16 +890,309 @@ const registrosFiltrados = registros
                                                 </Box>
                                             )}
                                         </Box>
-                                        <Text mt='8px'><strong>Proximo Servicio:</strong>
-                                            {
-                                                (registro.Servicios[0].proximoServicio).length > 0 ? 
-                                                parseInt(registro.Servicios[0].proximoServicio, 10) === -1 ? ' Realizar Proximo Servicio' : ` ${registro.Servicios[0].proximoServicio} Días` 
-                                                : ' -'
-                                            }
-                                        </Text>
-                                        <Text mt='8px'><strong>KM para Prox. Serv.:</strong> {registro.Servicios[0].kmProximoServicio ? `${registro.Servicios[0].kmProximoServicio} KMS` : 'No hay datos'}</Text>
-                                        <Text mt='8px'><strong>Desc. Prox. Servicio:</strong> {registro.Servicios[0].descripcionProximoServicio ? registro.Servicios[0].descripcionProximoServicio : ' -'}</Text>
-                                        <Text mt='8px'><strong>Fecha de Entrega:</strong> {formatDate((registro.Servicios[0].fechaEntrega).slice(0, 10))}</Text>
+                                        <Box
+                                            display='flex'
+                                            mt='8px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'><strong>Proximo Servicio:</strong></Text>
+                                            {isEditingProximoServicio ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    >
+                                                    <Input
+                                                        alignSelf='center'
+                                                        type="number"
+                                                        value={proximoServicio}
+                                                        onChange={handleChangeProximoServicio}
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSaveProximoServicio(registro.Servicios[0].clienteId)}
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text
+                                                            onClick={() => setIsEditingProximoServicio(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md">
+                                                        {
+                                                            (registro.Servicios[0].proximoServicio).length > 0 ?
+                                                            parseInt(registro.Servicios[0].proximoServicio, 10) === -1 ? 'Realizar Proximo Servicio' : `${registro.Servicios[0].proximoServicio} Días`
+                                                            : '-'
+                                                        }
+                                                    </Text>
+                                                    <Text
+                                                        as='button'
+                                                        onClick={() => { setProximoServicio(registro.Servicios[0].proximoServicio || ''); setIsEditingProximoServicio(true); }}
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Box
+                                            display='flex'
+                                            mt='8px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'><strong>KM para Prox. Serv.:</strong></Text>
+                                            {isEditingKmProximoServicio ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    >
+                                                    <Input
+                                                        alignSelf='center'
+                                                        type="number"
+                                                        value={kmProximoServicio}
+                                                        onChange={handleChangeKmProximoServicio}
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSaveKmProximoServicio(registro.Servicios[0].clienteId)}
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text
+                                                            onClick={() => setIsEditingKmProximoServicio(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md">
+                                                        {registro.Servicios[0].kmProximoServicio ? `${registro.Servicios[0].kmProximoServicio} KMS` : 'No hay datos'}
+                                                    </Text>
+                                                    <Text
+                                                        as='button'
+                                                        onClick={() => { setKmProximoServicio(registro.Servicios[0].kmProximoServicio || ''); setIsEditingKmProximoServicio(true); }}
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Box
+                                            display='flex'
+                                            mt='8px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'><strong>Observaciones próx. servicio:</strong></Text>
+                                            {isEditingDescripcionProximoServicio ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    w='100%'
+                                                    >
+                                                    <Textarea
+                                                        alignSelf='center'
+                                                        value={descripcionProximoServicio}
+                                                        onChange={handleChangeDescripcionProximoServicio}
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSaveDescripcionProximoServicio(registro.Servicios[0].clienteId)}
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text
+                                                            onClick={() => setIsEditingDescripcionProximoServicio(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md">
+                                                        {registro.Servicios[0].descripcionProximoServicio ? registro.Servicios[0].descripcionProximoServicio : '-'}
+                                                    </Text>
+                                                    <Text
+                                                        as='button'
+                                                        onClick={() => { setDescripcionProximoServicio(registro.Servicios[0].descripcionProximoServicio || ''); setIsEditingDescripcionProximoServicio(true); }}
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        {registro.Servicios[0].fechaIngreso && (
+                                            <Text mt='8px'><strong>Fecha de Ingreso:</strong> {formatDate((registro.Servicios[0].fechaIngreso).slice(0, 10))}</Text>
+                                        )}
+                                        <Box
+                                            display='flex'
+                                            mt='8px'
+                                            >
+                                            <Text fontSize="md" fontWeight="bold" alignSelf='center' mr='5px'><strong>Fecha de Entrega:</strong></Text>
+                                            {isEditingFechaEntrega ? (
+                                                <Box
+                                                    display='flex'
+                                                    flexDir={['column','row','row']}
+                                                    columnGap='10px'
+                                                    >
+                                                    <Input
+                                                        alignSelf='center'
+                                                        type="date"
+                                                        value={fechaEntrega}
+                                                        onChange={handleChangeFechaEntrega}
+                                                        size="md"
+                                                        w='100%'
+                                                        ml='8px'
+                                                    />
+                                                    <Flex
+                                                        flexDir='row'
+                                                        columnGap={['5px','10px','10px']}
+                                                        justifyContent='center'
+                                                        >
+                                                        <Text
+                                                            as='button'
+                                                            onClick={() => handleSaveFechaEntrega(registro.Servicios[0].clienteId)}
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='blue'
+                                                            >
+                                                            Guardar
+                                                        </Text>
+                                                        <Text
+                                                            onClick={() => setIsEditingFechaEntrega(false)}
+                                                            as='button'
+                                                            size="sm"
+                                                            _hover={{
+                                                                transform: 'scale(1.1)'
+                                                            }}
+                                                            fontWeight='bold'
+                                                            color='red'
+                                                            >
+                                                            Cancelar
+                                                        </Text>
+                                                    </Flex>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    display='flex'
+                                                    columnGap='10px'
+                                                    >
+                                                    <Text ml='8px' alignSelf='center' fontSize="md">
+                                                        {registro.Servicios[0].fechaEntrega ? formatDate((registro.Servicios[0].fechaEntrega).slice(0, 10)) : 'Sin asignar'}
+                                                    </Text>
+                                                    <Text
+                                                        as='button'
+                                                        onClick={() => { setFechaEntrega(registro.Servicios[0].fechaEntrega ? registro.Servicios[0].fechaEntrega.slice(0,10) : ''); setIsEditingFechaEntrega(true); }}
+                                                        size="sm"
+                                                        _hover={{
+                                                            transform: 'scale(1.1)'
+                                                        }}
+                                                        color='red'
+                                                        fontWeight='bold'
+                                                        >
+                                                        Editar
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
                                         <Flex
                                             mt='20px'
                                             justify='center'

@@ -61,7 +61,7 @@ function Home() {
                             transform: 'scale(1.1)'
                         }}
                         >
-                        Nuevo Cliente
+                        Nuevo Registro
                     </Button>
                 </Link>
             </Flex>

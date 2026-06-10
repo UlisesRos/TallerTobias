@@ -12,7 +12,8 @@ function ServicioForm({apiRender}) {
     
     const [ formData, setFormData ] = useState({
         descripcion: '',
-        fechaEntrega: new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }),
+        fechaIngreso: new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' }),
+        fechaEntrega: '',
         montoManoObra: '',
         montoRepuesto: '',
         proximoServicio: '',
@@ -48,7 +49,11 @@ function ServicioForm({apiRender}) {
         }
 
         try {
-            const response = await axios.post(`${apiRender}/api/postservicio`, formData);
+            const payload = {
+                ...formData,
+                fechaEntrega: formData.fechaEntrega || null
+            };
+            const response = await axios.post(`${apiRender}/api/postservicio`, payload);
 
             toast({
                 title: 'Exito',
@@ -157,35 +162,51 @@ function ServicioForm({apiRender}) {
                     onSubmit={ handleSubmit }
                     >
                     <Stack spacing={4}>
-                        <FormControl 
-                            id='descripcion' 
+                        <FormControl
+                            id='descripcion'
                             isRequired
                             >
                             <FormLabel
                                 textAlign='center'
                                 >
-                                Descripcion
+                                Motivo de Ingreso
                             </FormLabel>
                             <Textarea
                                 value={formData.descripcion}
                                 onChange={handleChange}
                                 fontWeight='medium'
                                 textAlign='center'
-                                w='280px' 
+                                w='280px'
                                 type='text'
                                 name='descripcion'
                                 placeholder='Ingresa la descripcion del servicio'
                                 />
                         </FormControl>
 
-                        <FormControl 
-                            id='fechaEntrega' 
-                            isRequired
+                        <FormControl id='fechaIngreso'>
+                            <FormLabel textAlign='center'>
+                                Fecha de Ingreso
+                            </FormLabel>
+                            <Input
+                                value={formData.fechaIngreso}
+                                onChange={handleChange}
+                                fontWeight='medium'
+                                textAlign='center'
+                                w='280px'
+                                type='date'
+                                name='fechaIngreso'
+                                isReadOnly
+                                bg='gray.100'
+                                />
+                        </FormControl>
+
+                        <FormControl
+                            id='fechaEntrega'
                             >
                             <FormLabel textAlign='center'>
                                 Fecha de Entrega
                             </FormLabel>
-                            <Input 
+                            <Input
                                 value={formData.fechaEntrega}
                                 onChange={handleChange}
                                 fontWeight='medium'
@@ -193,7 +214,6 @@ function ServicioForm({apiRender}) {
                                 w='280px'
                                 type='date'
                                 name='fechaEntrega'
-                                isReadOnly
                                 />
                         </FormControl>
 
@@ -299,13 +319,13 @@ function ServicioForm({apiRender}) {
                                 />
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             id='descripcionProximoServicio'
                             >
                             <FormLabel
                                 textAlign='center'
                                 >
-                                Descripcion del Prox Servicio
+                                Observaciones para próximo servicio
                             </FormLabel>
                             <Textarea
                                 value={formData.descripcionProximoServicio}

@@ -7,8 +7,10 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
         marca: '',
         modelo: '',
         descripcion: '',
+        fechaIngreso: '',
         monto: '',
         proximoServicio: '',
+        kmProximoServicio: '',
         descripcionProximoServicio: '',
         fechaEntrega: '',
     });
@@ -20,8 +22,10 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
                 marca: registro.Motos[0]?.marca || '',
                 modelo: registro.Motos[0]?.modelo || '',
                 descripcion: registro.Servicios[0]?.descripcion || '',
+                fechaIngreso: registro.Servicios[0]?.fechaIngreso || '',
                 monto: registro.Servicios[0]?.monto || '',
                 proximoServicio: registro.Servicios[0]?.proximoServicio || '',
+                kmProximoServicio: registro.Servicios[0]?.kmProximoServicio || '',
                 descripcionProximoServicio: registro.Servicios[0]?.descripcionProximoServicio || '',
                 fechaEntrega: registro.Servicios[0]?.fechaEntrega || '',
             });
@@ -37,7 +41,8 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
     };
 
     const handleSubmit = () => {
-        onSave(formData);
+        const { descripcion, fechaIngreso, ...payload } = formData;
+        onSave(payload);
         onClose();
     };
 
@@ -73,11 +78,13 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
                         />
                     </FormControl>
                     <FormControl mb={4}>
-                        <FormLabel>Descripción Servicio</FormLabel>
+                        <FormLabel>Motivo de Ingreso</FormLabel>
                         <Textarea
                             name="descripcion"
                             value={formData.descripcion}
                             onChange={handleChange}
+                            isReadOnly
+                            bg="gray.100"
                         />
                     </FormControl>
                     <FormControl mb={4}>
@@ -99,11 +106,30 @@ const EditModal = ({ isOpen, onClose, registro, onSave }) => {
                         />
                     </FormControl>
                     <FormControl mb={4}>
-                        <FormLabel>Descripción Próximo Servicio</FormLabel>
+                        <FormLabel>Próximo Servicio (KM)</FormLabel>
+                        <Input
+                            name="kmProximoServicio"
+                            type="number"
+                            value={formData.kmProximoServicio}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+                    <FormControl mb={4}>
+                        <FormLabel>Observaciones para próximo servicio</FormLabel>
                         <Textarea
                             name="descripcionProximoServicio"
                             value={formData.descripcionProximoServicio}
                             onChange={handleChange}
+                        />
+                    </FormControl>
+                    <FormControl mb={4}>
+                        <FormLabel>Fecha de Ingreso</FormLabel>
+                        <Input
+                            name="fechaIngreso"
+                            type="date"
+                            value={formData.fechaIngreso ? formData.fechaIngreso.slice(0, 10) : ''}
+                            isReadOnly
+                            bg="gray.100"
                         />
                     </FormControl>
                     <FormControl mb={4}>
